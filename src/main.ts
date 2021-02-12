@@ -1,19 +1,22 @@
+import * as path from 'path'
 import * as core from '@actions/core'
-import {wait} from './wait'
 
-async function run(): Promise<void> {
-  try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+import * as config from './config'
+import * as install from './install'
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+export async function run (): Promise<void> {
+  const version = core.getInput('version')
+  if (!version) {
+    core.setFailed('version cannot be empty')
+    return
+  }
 
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    core.setFailed(error.message)
+  const tools = config.loadConfig(version)
+  for (const tool of tools) {
+    const cachedPath = await install.downloadTool(tool)
+    core.debug(`Cached path ${cachedPath}`)
+    core.addPath(path.dirname(cachedPath))
   }
 }
 
-run()
+run().catch(core.setFailed)
