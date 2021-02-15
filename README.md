@@ -21,7 +21,7 @@ This action will setup the following tools (for version `waas/v1alpha3` and `waa
 ## Example usage
 
 ```yaml
-uses: metro-digital-inner-source/setup-tools-for-waas
+uses: metro-digital/setup-tools-for-waas
 with:
     version: 'waas/v1alpha3'
 ```
