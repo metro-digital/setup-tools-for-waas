@@ -17,10 +17,10 @@ export function loadConfig (version: string): Tools {
     // nothing for the moment
   } else if (version === 'waas/v1alpha2') {
     // nothing for the moment
-  } else if (version === 'waas/v1alpha3') {
+  } else if (version === 'waas/v1alpha3' || version === 'waas/v1alpha4') {
     const configFilepath = path.join(__dirname, `${version.replace('/', '.')}.yaml`)
     core.debug(`Reading config from ${configFilepath}`)
-    return yaml.safeLoad(fs.readFileSync(configFilepath, 'utf8')
+    return yaml.load(fs.readFileSync(configFilepath, 'utf8')
     ) as Tools
   }
 
