@@ -24,3 +24,6 @@ jobs:
       - uses: ./
         with:
           version: 'waas/v1alpha3'
+      - uses: ./
+        with:
+          version: 'waas/v1alpha4'
