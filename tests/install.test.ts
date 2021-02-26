@@ -69,11 +69,11 @@ describe('installer tests', () => {
     expectRightVersion(tool, './kustomize version')
   })
 
-  it('Acquires skaffold version 1.17.1', async () => {
+  it('Acquires skaffold version 1.20.0', async () => {
     const tool = {
       name: 'skaffold',
-      version: '1.17.1',
-      url: `https://github.com/GoogleContainerTools/skaffold/releases/download/v1.17.1/skaffold-${process.platform}-amd64`
+      version: '1.20.0',
+      url: `https://github.com/GoogleContainerTools/skaffold/releases/download/v1.20.0/skaffold-${process.platform}-amd64`
     }
     await install.downloadTool(tool)
 
