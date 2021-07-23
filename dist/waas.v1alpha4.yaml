@@ -25,5 +25,5 @@
   dest: ${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/goabout.com/v1beta1/sopssecretgenerator
 -
   name: kenv
-  version: 1.0.1
+  version: 1.0.2
   url: https://github.com/metro-digital/kenv/releases/download/v1.0.1/kenv.linux.amd64
