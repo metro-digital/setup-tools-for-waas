@@ -9,7 +9,7 @@ For latest version, `waas/v1alpha4`, following tools are set up.
 - skaffold 1.20.0
 - sops 3.6.1
 - yq 3.4.1
-- SopsSecretGenerator 1.3.0
+- SopsSecretGenerator 1.3.2
 
 ## Inputs
 
