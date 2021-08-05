@@ -3,12 +3,18 @@ import * as core from '@actions/core'
 
 import * as config from './config'
 import * as install from './install'
+import * as gcp from './gcp-sa'
 
 export async function run (): Promise<void> {
   const version = core.getInput('version')
   if (!version) {
     core.setFailed('version cannot be empty')
     return
+  }
+
+  const serviceAccountKey = core.getInput('gcp_sa_key')
+  if (serviceAccountKey) {
+    await gcp.setupGcpSa(serviceAccountKey)
   }
 
   const tools = config.loadConfig(version)
