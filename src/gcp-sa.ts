@@ -3,18 +3,18 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { v4 as uuidv4 } from 'uuid'
 
-export async function setupGcpSa (serviceAccountKey: string): Promise<void> {
+export async function setupServiceAccount (serviceAccountKey: string): Promise<void> {
   try {
     const credsDir = String(process.env.GITHUB_WORKSPACE)
     const credsPath = path.join(credsDir, uuidv4())
 
-    const serviceAccountKeyObj = parseServiceAccountKey(
+    const serviceAccount = parseServiceAccountKey(
       serviceAccountKey
     )
 
-    await fs.writeFile(credsPath, JSON.stringify(serviceAccountKeyObj, null, 2))
+    await fs.writeFile(credsPath, JSON.stringify(serviceAccount, null, 2))
 
-    core.exportVariable('GCLOUD_PROJECT', serviceAccountKeyObj.project_id)
+    core.exportVariable('GCLOUD_PROJECT', serviceAccount.project_id)
     core.exportVariable('GOOGLE_APPLICATION_CREDENTIALS', credsPath)
     core.info('Successfully exported Default Application Credentials')
   } catch (error) {

@@ -14,7 +14,7 @@ export async function run (): Promise<void> {
 
   const serviceAccountKey = core.getInput('gcp_sa_key')
   if (serviceAccountKey) {
-    await gcp.setupGcpSa(serviceAccountKey)
+    await gcp.setupServiceAccount(serviceAccountKey)
   }
 
   const tools = config.loadConfig(version)
