@@ -5,6 +5,12 @@ inputs:
   version:
     description: 'waas schema version (e.g. waas/v1alpha3) for which tools should set up'
     required: true
+  gcp_sa_key:
+    description: |-
+      GCP service account key to use for authentication. This should be the JSON
+      formatted private key which can be exported from the Cloud Console. The
+      value can be raw or base64-encoded.
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
