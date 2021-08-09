@@ -3,7 +3,7 @@ import * as core from '@actions/core'
 
 import * as config from './config'
 import * as install from './install'
-import * as gcp from './gcp-sa'
+import * as gcp from './gcp'
 
 export async function run (): Promise<void> {
   const version = core.getInput('version')

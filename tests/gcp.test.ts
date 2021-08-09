@@ -1,4 +1,4 @@
-import * as gcp from '../src/gcp-sa'
+import * as gcp from '../src/gcp'
 import io = require('@actions/io')
 import fs = require('fs')
 import path = require('path')
@@ -29,7 +29,7 @@ describe('GCP Service Account setup', () => {
   }`
 
   it('should process an JSON string', async () => {
-    await gcp.setupGcpSa(serviceAccountKey)
+    await gcp.setupServiceAccount(serviceAccountKey)
     expect(process.env.GCLOUD_PROJECT).toEqual('cf-2tier-uhd-test-e9')
     expect(process.env.GOOGLE_APPLICATION_CREDENTIALS).toMatch(/workspace/)
     expect(fs.existsSync(path.resolve(String(process.env.GOOGLE_APPLICATION_CREDENTIALS)))).toBe(true)
@@ -37,7 +37,7 @@ describe('GCP Service Account setup', () => {
 
   it('should process an base64 encoded string', async () => {
     const input = Buffer.from(serviceAccountKey, 'ascii').toString('base64')
-    await gcp.setupGcpSa(input)
+    await gcp.setupServiceAccount(input)
     expect(process.env.GCLOUD_PROJECT).toEqual('cf-2tier-uhd-test-e9')
     expect(process.env.GOOGLE_APPLICATION_CREDENTIALS).toMatch(/workspace/)
     expect(fs.existsSync(path.resolve(String(process.env.GOOGLE_APPLICATION_CREDENTIALS)))).toBe(true)
