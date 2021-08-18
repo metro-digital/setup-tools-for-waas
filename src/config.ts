@@ -12,12 +12,14 @@ export type Tool = {
 
 export type Tools = Tool[]
 
+const supportedVersions = ['waas/v1alpha3', 'waas/v1alpha4', 'waas/v1beta1']
+
 export function loadConfig (version: string): Tools {
   if (version === 'waas/v1alpha1') {
     // nothing for the moment
   } else if (version === 'waas/v1alpha2') {
     // nothing for the moment
-  } else if (version === 'waas/v1alpha3' || version === 'waas/v1alpha4') {
+  } else if (supportedVersions.includes(version)) {
     const configFilepath = path.join(__dirname, `${version.replace('/', '.')}.yaml`)
     core.debug(`Reading config from ${configFilepath}`)
     return yaml.load(fs.readFileSync(configFilepath, 'utf8')
