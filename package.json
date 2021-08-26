@@ -19,7 +19,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
+    "@types/jest": "^27.0.1",
     "@types/js-yaml": "^4.0.1",
     "@types/node": "^16.7.1",
     "@types/semver": "^7.3.6",
