@@ -80,7 +80,6 @@ describe('installer tests', () => {
     expectToolExist(tool)
     expectRightVersion(tool, './skaffold version')
   })
-
 })
 
 function expectToolExist (tool :any) {
