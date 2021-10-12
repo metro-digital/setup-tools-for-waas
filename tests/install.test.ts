@@ -81,17 +81,6 @@ describe('installer tests', () => {
     expectRightVersion(tool, './skaffold version')
   })
 
-  it('Acquires SopsSecretGenerator version 1.3.0', async () => {
-    const tool = {
-      name: 'SopsSecretGenerator',
-      version: '1.3.0',
-      url: `https://github.com/goabout/kustomize-sopssecretgenerator/releases/download/v1.3.0/SopsSecretGenerator_1.3.0_${process.platform}_amd64`,
-      dest: toolBaseDir + '/.config/kustomize/plugin/goabout.com/v1beta1/sopssecretgenerator'
-    }
-
-    await install.downloadTool(tool)
-    expectToolExist(tool)
-  })
 })
 
 function expectToolExist (tool :any) {
