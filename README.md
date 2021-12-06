@@ -11,7 +11,7 @@ For latest version, `waas/v1`, following tools are set up.
 - yq 3.4.1
 - SopsSecretGenerator 1.3.2
 - kenv 1.0.2
-- KGCPSecret 1.0.3 
+- KGCPSecret 1.0.3
 
 ## Inputs
 

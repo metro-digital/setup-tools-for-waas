@@ -12,7 +12,13 @@ export type Tool = {
 
 export type Tools = Tool[]
 
-const supportedVersions = ['waas/v1alpha3', 'waas/v1alpha4', 'waas/v1beta1', 'waas/v1']
+const supportedVersions = [
+  'waas/v1alpha3',
+  'waas/v1alpha4',
+  'waas/v1beta1',
+  'waas/v1',
+  'waas/v2alpha1'
+]
 
 export function loadConfig (version: string): Tools {
   if (version === 'waas/v1alpha1') {
