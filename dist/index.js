@@ -7991,7 +7991,13 @@ const core = __importStar(__webpack_require__(470));
 const fs = __importStar(__webpack_require__(747));
 const yaml = __importStar(__webpack_require__(414));
 const path = __importStar(__webpack_require__(622));
-const supportedVersions = ['waas/v1alpha3', 'waas/v1alpha4', 'waas/v1beta1', 'waas/v1'];
+const supportedVersions = [
+    'waas/v1alpha3',
+    'waas/v1alpha4',
+    'waas/v1beta1',
+    'waas/v1',
+    'waas/v2alpha1'
+];
 function loadConfig(version) {
     if (version === 'waas/v1alpha1') {
         // nothing for the moment
