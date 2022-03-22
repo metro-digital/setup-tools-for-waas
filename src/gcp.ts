@@ -18,7 +18,7 @@ export async function setupServiceAccount (serviceAccountKey: string): Promise<v
     core.exportVariable('GOOGLE_APPLICATION_CREDENTIALS', credsPath)
     core.info('Successfully exported Default Application Credentials')
   } catch (error) {
-    core.setFailed(error.message)
+    core.setFailed((error as Error).message)
   }
 }
 
