@@ -1,9 +1,17 @@
 import * as path from 'path'
 import * as fs from 'fs'
-
 import * as toolCache from '@actions/tool-cache'
-import { Tool } from './config'
 import * as command from './command'
+
+export type Tool = {
+  name: string
+  version: string
+  url: string
+  dest?: string | undefined
+}
+
+export type Tools = Tool[]
+
 
 export async function downloadTool (tool: Tool): Promise<string> {
   let toolDownloadPath = ''

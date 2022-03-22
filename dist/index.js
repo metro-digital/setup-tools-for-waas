@@ -1600,8 +1600,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
 const path = __importStar(__webpack_require__(622));
+const fs = __importStar(__webpack_require__(747));
+const yaml = __importStar(__webpack_require__(414));
 const core = __importStar(__webpack_require__(470));
-const config = __importStar(__webpack_require__(641));
 const install = __importStar(__webpack_require__(655));
 const gcp = __importStar(__webpack_require__(602));
 function run() {
@@ -1615,7 +1616,9 @@ function run() {
         if (serviceAccountKey) {
             yield gcp.setupServiceAccount(serviceAccountKey);
         }
-        const tools = config.loadConfig(version);
+        const configFilepath = path.join(__dirname, `${version.replace('/', '.')}.yaml`);
+        core.debug(`Reading config from ${configFilepath}`);
+        const tools = yaml.load(fs.readFileSync(configFilepath, 'utf8'));
         for (const tool of tools) {
             const cachedPath = yield install.downloadTool(tool);
             core.debug(`Cached path ${cachedPath}`);
@@ -7913,14 +7916,15 @@ function setupServiceAccount(serviceAccountKey) {
             core.info('Successfully exported Default Application Credentials');
         }
         catch (error) {
-            core.setFailed(error.message);
+            if (error instanceof Error) {
+                core.setFailed(error.message);
+            }
         }
     });
 }
 exports.setupServiceAccount = setupServiceAccount;
 function parseServiceAccountKey(serviceAccountKey) {
     let serviceAccount = serviceAccountKey;
-    // Handle base64-encoded credentials
     if (!serviceAccountKey.trim().startsWith('{')) {
         serviceAccount = Buffer.from(serviceAccountKey, 'base64').toString('utf8');
     }
@@ -7969,66 +7973,6 @@ var crypto = __webpack_require__(417);
 module.exports = function nodeRNG() {
   return crypto.randomBytes(16);
 };
-
-
-/***/ }),
-
-/***/ 641:
-/***/ (function(__unusedmodule, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadConfig = void 0;
-const core = __importStar(__webpack_require__(470));
-const fs = __importStar(__webpack_require__(747));
-const yaml = __importStar(__webpack_require__(414));
-const path = __importStar(__webpack_require__(622));
-const supportedVersions = [
-    'waas/v1alpha3',
-    'waas/v1alpha4',
-    'waas/v1beta1',
-    'waas/v1',
-    'waas/v2alpha1'
-];
-function loadConfig(version) {
-    if (version === 'waas/v1alpha1') {
-        // nothing for the moment
-    }
-    else if (version === 'waas/v1alpha2') {
-        // nothing for the moment
-    }
-    else if (supportedVersions.includes(version)) {
-        const configFilepath = path.join(__dirname, `${version.replace('/', '.')}.yaml`);
-        core.debug(`Reading config from ${configFilepath}`);
-        return yaml.load(fs.readFileSync(configFilepath, 'utf8'));
-    }
-    throw new Error('version not supported');
-}
-exports.loadConfig = loadConfig;
 
 
 /***/ }),

@@ -1,7 +1,7 @@
 import * as path from 'path'
+import * as fs from 'fs'
+import * as yaml from 'js-yaml'
 import * as core from '@actions/core'
-
-import * as config from './config'
 import * as install from './install'
 import * as gcp from './gcp'
 
@@ -17,7 +17,9 @@ export async function run (): Promise<void> {
     await gcp.setupServiceAccount(serviceAccountKey)
   }
 
-  const tools = config.loadConfig(version)
+  const configFilepath = path.join(__dirname, `${version.replace('/', '.')}.yaml`)
+  core.debug(`Reading config from ${configFilepath}`)
+  const tools = yaml.load(fs.readFileSync(configFilepath, 'utf8')) as install.Tools
   for (const tool of tools) {
     const cachedPath = await install.downloadTool(tool)
     core.debug(`Cached path ${cachedPath}`)
