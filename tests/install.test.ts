@@ -11,14 +11,17 @@ process.env.RUNNER_TOOL_CACHE = toolBaseDir
 process.env.RUNNER_TEMP = tempDir
 
 describe('installer tests', () => {
+  let stdoutSpy: jest.SpyInstance
   beforeAll(async () => {
     await io.rmRF(toolBaseDir)
     await io.rmRF(tempDir)
+    stdoutSpy = jest.spyOn(global.process.stdout, 'write').mockImplementation();
   })
 
   afterAll(async () => {
     await io.rmRF(toolBaseDir)
     await io.rmRF(tempDir)
+    stdoutSpy.mockRestore()
   })
 
   it('Acquires kubectl version 1.17.17', async () => {

@@ -1,9 +1,20 @@
 import * as config from '../src/config'
 import fs from 'fs'
+import core = require('@actions/core')
 import * as yaml from 'js-yaml'
 jest.mock('fs')
 
+jest.spyOn(process.stdout, 'write')
 describe('config tests', () => {
+  let stdoutSpy: jest.SpyInstance
+  beforeAll(() => {
+    stdoutSpy = jest.spyOn(global.process.stdout, 'write').mockImplementation();
+  })
+
+  afterAll(() => {
+    stdoutSpy.mockRestore()
+  })
+
   it('Loads the config for version waas/v1alpha3', async () => {
     const tool = [{
       name: 'kubectl',
