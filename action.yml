@@ -1,9 +1,9 @@
-name: 'Setup tools for WaaS'
-description: 'Setup a WaaS tool environment and add it to the path'
-author: 'METRO.digital'
+name: "Setup tools for WaaS"
+description: "Setup a WaaS tool environment and add it to the path"
+author: "METRO.digital"
 inputs:
   version:
-    description: 'waas schema version (e.g. waas/v1alpha3) for which tools should set up'
+    description: "waas schema version (e.g. waas/v1alpha3) for which tools should set up"
     required: true
   gcp_sa_key:
     description: |-
@@ -12,5 +12,5 @@ inputs:
       value can be raw or base64-encoded.
     required: false
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+  using: "node16"
+  main: "dist/index.js"
