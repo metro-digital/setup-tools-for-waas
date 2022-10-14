@@ -5,11 +5,15 @@
   "description": "Github action to setup tools used by the WaaS workflow",
   "main": "dist/index.js",
   "scripts": {
-    "build": "ncc build src/main.ts",
+    "build": "esbuild --bundle --platform=node --target=node16 --outfile=dist/index.js src/main.ts",
+    "clean": "rimraf cache && rimraf temp",
+    "git:add:dist": "git add dist",
     "start": "node ./dist/index.js",
     "lint": "eslint **/*.ts",
     "lint:fix": "eslint **/*.ts --fix",
-    "test": "jest --coverage"
+    "test": "npm run clean && jest --coverage",
+    "test:build:ci": ". ./.env-ci && node ./dist/index.jss",
+    "test:build:local": "npm run cliean && . ./.env-local && npm run build && node ./dist/index.js"
   },
   "keywords": [],
   "author": "METRO Digital GmbH",
@@ -19,17 +23,30 @@
     "@actions/tool-cache": "^2.0.1"
   },
   "devDependencies": {
+    "@fastify/pre-commit": "^2.0.2",
+    "@tsconfig/node16": "^1.0.3",
     "@types/jest": "^29.1.2",
     "@types/js-yaml": "^4.0.5",
     "@types/node": "^18.8.5",
     "@typescript-eslint/eslint-plugin": "^5.40.0",
     "@typescript-eslint/parser": "^5.40.0",
-    "@zeit/ncc": "^0.22.3",
+    "esbuild": "^0.15.10",
     "eslint": "^8.25.0",
     "eslint-config-standard": "^17.0.0",
     "jest": "^29.1.2",
     "js-yaml": "^4.1.0",
+    "rimraf": "^3.0.2",
     "ts-jest": "^29.0.3",
     "typescript": "^4.8.4"
-  }
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "pre-commit": [
+    "lint",
+    "test",
+    "build",
+    "test:build:local",
+    "git:add:dist"
+  ]
 }

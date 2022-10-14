@@ -40,7 +40,7 @@ export async function downloadTool (tool: Tool) {
   fs.chmodSync(toolPath, '777')
   // special case: copy binary to specific directory (when PATH is ignored)
   if (tool.dest !== undefined && tool.dest !== '') {
-    let result: command.Result = await command.exec('sh', ['-c', `echo "${tool.dest}"`])
+    let result = await command.exec('sh', ['-c', `echo "${tool.dest}"`])
     if (!result.status) {
       throw new Error(`cannot expand destination directory path for ${tool.name}`)
     }
