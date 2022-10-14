@@ -15,7 +15,7 @@ describe('installer tests', () => {
   beforeAll(async () => {
     await io.rmRF(toolBaseDir)
     await io.rmRF(tempDir)
-    stdoutSpy = jest.spyOn(global.process.stdout, 'write').mockImplementation();
+    stdoutSpy = jest.spyOn(global.process.stdout, 'write').mockImplementation()
   })
 
   afterAll(async () => {

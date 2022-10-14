@@ -10,7 +10,7 @@ describe('GCP Service Account setup', () => {
   let stdoutSpy: jest.SpyInstance
   beforeAll(async () => {
     await io.mkdirP(workspaceDir)
-    stdoutSpy = jest.spyOn(global.process.stdout, 'write').mockImplementation();
+    stdoutSpy = jest.spyOn(global.process.stdout, 'write').mockImplementation()
   })
 
   afterAll(async () => {

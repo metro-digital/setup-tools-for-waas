@@ -12,7 +12,6 @@ export type Tool = {
 
 export type Tools = Tool[]
 
-
 export async function downloadTool (tool: Tool): Promise<string> {
   let toolDownloadPath = ''
 
