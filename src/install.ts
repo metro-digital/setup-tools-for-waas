@@ -12,7 +12,7 @@ export type Tool = {
 
 export type Tools = Tool[]
 
-export async function downloadTool (tool: Tool): Promise<string> {
+export async function downloadTool (tool: Tool) {
   let toolDownloadPath = ''
 
   let cachedToolpath = toolCache.find(tool.name, tool.version)
