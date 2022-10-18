@@ -37,20 +37,20 @@ export async function downloadTool (tool: Tool) {
   }
 
   const toolPath = path.join(cachedToolpath, tool.name)
+
   fs.chmodSync(toolPath, '777')
   // special case: copy binary to specific directory (when PATH is ignored)
   if (tool.dest !== undefined && tool.dest !== '') {
-    let result = await command.exec('sh', ['-c', `echo "${tool.dest}"`])
-    if (!result.status) {
-      throw new Error(`cannot expand destination directory path for ${tool.name}`)
-    }
-    const destDir = result.output
-    result = await command.exec('mkdir', ['-p', `${destDir}`])
+    const baseDir = (process.env.XDG_CONFIG_HOME || (process.env.HOME || '') + '/.config')
+    // eslint-disable-next-line no-template-curly-in-string
+    const destDir = tool.dest.replace('${XDG_CONFIG_HOME:-$HOME/.config}', baseDir)
+
+    let result = await command.exec('mkdir', ['-p', `${destDir}`])
     if (!result.status) {
       throw new Error(`cannot create destination directory ${destDir} for ${tool.name}`)
     }
     const destPath = path.join(destDir, tool.name)
-    result = await command.exec('cp', ['-f', `${toolPath}`, `${destPath}`])
+    result = await command.exec('cp', ['-f', toolPath, destPath])
     if (!result.status) {
       throw new Error(`cannot copy ${tool.name} to ${destPath}`)
     }

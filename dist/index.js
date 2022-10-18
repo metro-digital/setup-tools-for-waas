@@ -7945,17 +7945,14 @@ async function downloadTool2(tool) {
   const toolPath = path.join(cachedToolpath, tool.name);
   fs.chmodSync(toolPath, "777");
   if (tool.dest !== void 0 && tool.dest !== "") {
-    let result = await exec("sh", ["-c", `echo "${tool.dest}"`]);
-    if (!result.status) {
-      throw new Error(`cannot expand destination directory path for ${tool.name}`);
-    }
-    const destDir = result.output;
-    result = await exec("mkdir", ["-p", `${destDir}`]);
+    const baseDir = process.env.XDG_CONFIG_HOME || (process.env.HOME || "") + "/.config";
+    const destDir = tool.dest.replace("${XDG_CONFIG_HOME:-$HOME/.config}", baseDir);
+    let result = await exec("mkdir", ["-p", `${destDir}`]);
     if (!result.status) {
       throw new Error(`cannot create destination directory ${destDir} for ${tool.name}`);
     }
     const destPath = path.join(destDir, tool.name);
-    result = await exec("cp", ["-f", `${toolPath}`, `${destPath}`]);
+    result = await exec("cp", ["-f", toolPath, destPath]);
     if (!result.status) {
       throw new Error(`cannot copy ${tool.name} to ${destPath}`);
     }

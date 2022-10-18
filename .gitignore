@@ -101,3 +101,5 @@ cache/
 temp/
 .vscode/
 tests/runner/
+
+.config
