@@ -23,7 +23,8 @@ jobs:
           npm install
       - run: |
           npm run test
-  test-integration:
+  test-integration_waas_v1alpha3:
+    name: 'waas/v1alpha3'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -31,18 +32,38 @@ jobs:
         uses: ./
         with:
           version: 'waas/v1alpha3'
+  test-integration_waas_v1alpha4:
+    name: 'waas/v1alpha4'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
       - name: 'waas/v1alpha4'
         uses: ./
         with:
           version: 'waas/v1alpha4'
+  test-integration_waas_v1beta1:
+    name: 'waas/v1beta1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
       - name: 'waas/v1beta1'
         uses: ./
         with:
           version: 'waas/v1beta1'
+  test-integration_waas_v2:
+    name: 'waas/v2'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
       - name: 'waas/v2'
         uses: ./
         with:
           version: 'waas/v2'
+  test-integration_waas_v2latest:
+    name: 'waas/latest'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
       - name: 'waas/latest'
         uses: ./
         with:
