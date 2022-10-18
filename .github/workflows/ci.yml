@@ -39,6 +39,9 @@ jobs:
       - uses: ./
         with:
           version: 'waas/v2'
+      - uses: ./
+        with:
+          version: 'waas/latest'
   integrity:
     runs-on: ubuntu-latest
     steps:
