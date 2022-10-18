@@ -7946,7 +7946,7 @@ async function downloadTool2(tool) {
   fs.chmodSync(toolPath, "777");
   if (tool.dest !== void 0 && tool.dest !== "") {
     const baseDir = process.env.XDG_CONFIG_HOME || (process.env.HOME || "") + "/.config";
-    const destDir = tool.dest.replace("${WAAS_DEST_DIR}", baseDir);
+    const destDir = tool.dest.replace("${WAAS_TOOLS_DEST_DIR}", baseDir);
     let result = await exec("mkdir", ["-p", `${destDir}`]);
     if (!result.status) {
       throw new Error(`cannot create destination directory ${destDir} for ${tool.name}`);

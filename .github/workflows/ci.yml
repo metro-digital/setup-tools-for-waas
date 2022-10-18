@@ -27,19 +27,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./
+      - name: 'waas/v1alpha3'
+        uses: ./
         with:
           version: 'waas/v1alpha3'
-      - uses: ./
+      - name: 'waas/v1alpha4'
+        uses: ./
         with:
           version: 'waas/v1alpha4'
-      - uses: ./
+      - name: 'waas/v1beta1'
+        uses: ./
         with:
           version: 'waas/v1beta1'
-      - uses: ./
+      - name: 'waas/v2'
+        uses: ./
         with:
           version: 'waas/v2'
-      - uses: ./
+      - name: 'waas/latest'
+        uses: ./
         with:
           version: 'waas/latest'
   integrity:
