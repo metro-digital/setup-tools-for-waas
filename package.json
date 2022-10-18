@@ -13,7 +13,7 @@
     "lint:fix": "eslint **/*.ts --fix",
     "test": "npm run clean && jest --coverage",
     "test:build:ci": ". ./.env-ci && node ./dist/index.js",
-    "test:build:local": "npm run cliean && . ./.env-local && npm run build && node ./dist/index.js"
+    "test:build:local": "npm run clean && . ./.env-local && npm run build && node ./dist/index.js"
   },
   "keywords": [],
   "author": "METRO Digital GmbH",
@@ -46,7 +46,6 @@
     "lint",
     "test",
     "build",
-    "test:build:local",
     "git:add:dist"
   ]
 }
