@@ -16,11 +16,11 @@
 - name: SopsSecretGenerator
   version: 1.3.2
   url: https://github.com/goabout/kustomize-sopssecretgenerator/releases/download/v1.3.2/SopsSecretGenerator_1.3.2_linux_amd64
-  dest: ${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/goabout.com/v1beta1/sopssecretgenerator
+  dest: ${WAAS_TOOLS_DEST_DIR}/kustomize/plugin/goabout.com/v1beta1/sopssecretgenerator
 - name: kenv
   version: 1.1.0
   url: https://github.com/metro-digital/kenv/releases/download/v1.1.0/kenv.linux.amd64
 - name: KGCPSecret
   version: 1.2.0
   url: https://github.com/metro-digital/kustomize-google-secret-manager/releases/download/v1.1.0/KGCPSecret.linux.amd64.tar.gz
-  dest: ${XDG_CONFIG_HOME:-$HOME/.config}/kustomize/plugin/metro.digital/v1/kgcpsecret
+  dest: ${WAAS_TOOLS_DEST_DIR}/kustomize/plugin/metro.digital/v1/kgcpsecret
