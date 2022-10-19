@@ -88,3 +88,6 @@ jobs:
     - name: Repository Integrity Check
       run: |
         git diff --quiet dist
+    - uses: fastify/github-action-merge-dependabot@v3.0.0
+      with:
+        exclude: '@actions/core,@actions/tool-cache'
