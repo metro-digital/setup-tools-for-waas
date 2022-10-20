@@ -2428,7 +2428,7 @@ var require_io = __commonJS({
     var path4 = __importStar(require("path"));
     var util_1 = require("util");
     var ioUtil = __importStar(require_io_util());
-    var exec2 = util_1.promisify(childProcess.exec);
+    var exec = util_1.promisify(childProcess.exec);
     var execFile = util_1.promisify(childProcess.execFile);
     function cp(source, dest, options = {}) {
       return __awaiter(this, void 0, void 0, function* () {
@@ -2487,11 +2487,11 @@ var require_io = __commonJS({
           try {
             const cmdPath = ioUtil.getCmdPath();
             if (yield ioUtil.isDirectory(inputPath, true)) {
-              yield exec2(`${cmdPath} /s /c "rd /s /q "%inputPath%""`, {
+              yield exec(`${cmdPath} /s /c "rd /s /q "%inputPath%""`, {
                 env: { inputPath }
               });
             } else {
-              yield exec2(`${cmdPath} /s /c "del /f /a "%inputPath%""`, {
+              yield exec(`${cmdPath} /s /c "del /f /a "%inputPath%""`, {
                 env: { inputPath }
               });
             }
@@ -4529,7 +4529,7 @@ var require_exec = __commonJS({
     exports.getExecOutput = exports.exec = void 0;
     var string_decoder_1 = require("string_decoder");
     var tr = __importStar(require_toolrunner());
-    function exec2(commandLine, args, options) {
+    function exec(commandLine, args, options) {
       return __awaiter(this, void 0, void 0, function* () {
         const commandArgs = tr.argStringToArray(commandLine);
         if (commandArgs.length === 0) {
@@ -4541,7 +4541,7 @@ var require_exec = __commonJS({
         return runner.exec();
       });
     }
-    exports.exec = exec2;
+    exports.exec = exec;
     function getExecOutput(commandLine, args, options) {
       var _a, _b;
       return __awaiter(this, void 0, void 0, function* () {
@@ -4564,7 +4564,7 @@ var require_exec = __commonJS({
           }
         };
         const listeners = Object.assign(Object.assign({}, options === null || options === void 0 ? void 0 : options.listeners), { stdout: stdOutListener, stderr: stdErrListener });
-        const exitCode = yield exec2(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+        const exitCode = yield exec(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
         stdout += stdoutDecoder.end();
         stderr += stderrDecoder.end();
         return {
@@ -5230,6 +5230,230 @@ var require_tool_cache = __commonJS({
     function _unique(values) {
       return Array.from(new Set(values));
     }
+  }
+});
+
+// node_modules/mkdirp/lib/opts-arg.js
+var require_opts_arg = __commonJS({
+  "node_modules/mkdirp/lib/opts-arg.js"(exports, module2) {
+    var { promisify } = require("util");
+    var fs4 = require("fs");
+    var optsArg = (opts) => {
+      if (!opts)
+        opts = { mode: 511, fs: fs4 };
+      else if (typeof opts === "object")
+        opts = { mode: 511, fs: fs4, ...opts };
+      else if (typeof opts === "number")
+        opts = { mode: opts, fs: fs4 };
+      else if (typeof opts === "string")
+        opts = { mode: parseInt(opts, 8), fs: fs4 };
+      else
+        throw new TypeError("invalid options argument");
+      opts.mkdir = opts.mkdir || opts.fs.mkdir || fs4.mkdir;
+      opts.mkdirAsync = promisify(opts.mkdir);
+      opts.stat = opts.stat || opts.fs.stat || fs4.stat;
+      opts.statAsync = promisify(opts.stat);
+      opts.statSync = opts.statSync || opts.fs.statSync || fs4.statSync;
+      opts.mkdirSync = opts.mkdirSync || opts.fs.mkdirSync || fs4.mkdirSync;
+      return opts;
+    };
+    module2.exports = optsArg;
+  }
+});
+
+// node_modules/mkdirp/lib/path-arg.js
+var require_path_arg = __commonJS({
+  "node_modules/mkdirp/lib/path-arg.js"(exports, module2) {
+    var platform = process.env.__TESTING_MKDIRP_PLATFORM__ || process.platform;
+    var { resolve, parse } = require("path");
+    var pathArg = (path4) => {
+      if (/\0/.test(path4)) {
+        throw Object.assign(
+          new TypeError("path must be a string without null bytes"),
+          {
+            path: path4,
+            code: "ERR_INVALID_ARG_VALUE"
+          }
+        );
+      }
+      path4 = resolve(path4);
+      if (platform === "win32") {
+        const badWinChars = /[*|"<>?:]/;
+        const { root } = parse(path4);
+        if (badWinChars.test(path4.substr(root.length))) {
+          throw Object.assign(new Error("Illegal characters in path."), {
+            path: path4,
+            code: "EINVAL"
+          });
+        }
+      }
+      return path4;
+    };
+    module2.exports = pathArg;
+  }
+});
+
+// node_modules/mkdirp/lib/find-made.js
+var require_find_made = __commonJS({
+  "node_modules/mkdirp/lib/find-made.js"(exports, module2) {
+    var { dirname: dirname2 } = require("path");
+    var findMade = (opts, parent, path4 = void 0) => {
+      if (path4 === parent)
+        return Promise.resolve();
+      return opts.statAsync(parent).then(
+        (st) => st.isDirectory() ? path4 : void 0,
+        (er) => er.code === "ENOENT" ? findMade(opts, dirname2(parent), parent) : void 0
+      );
+    };
+    var findMadeSync = (opts, parent, path4 = void 0) => {
+      if (path4 === parent)
+        return void 0;
+      try {
+        return opts.statSync(parent).isDirectory() ? path4 : void 0;
+      } catch (er) {
+        return er.code === "ENOENT" ? findMadeSync(opts, dirname2(parent), parent) : void 0;
+      }
+    };
+    module2.exports = { findMade, findMadeSync };
+  }
+});
+
+// node_modules/mkdirp/lib/mkdirp-manual.js
+var require_mkdirp_manual = __commonJS({
+  "node_modules/mkdirp/lib/mkdirp-manual.js"(exports, module2) {
+    var { dirname: dirname2 } = require("path");
+    var mkdirpManual = (path4, opts, made) => {
+      opts.recursive = false;
+      const parent = dirname2(path4);
+      if (parent === path4) {
+        return opts.mkdirAsync(path4, opts).catch((er) => {
+          if (er.code !== "EISDIR")
+            throw er;
+        });
+      }
+      return opts.mkdirAsync(path4, opts).then(() => made || path4, (er) => {
+        if (er.code === "ENOENT")
+          return mkdirpManual(parent, opts).then((made2) => mkdirpManual(path4, opts, made2));
+        if (er.code !== "EEXIST" && er.code !== "EROFS")
+          throw er;
+        return opts.statAsync(path4).then((st) => {
+          if (st.isDirectory())
+            return made;
+          else
+            throw er;
+        }, () => {
+          throw er;
+        });
+      });
+    };
+    var mkdirpManualSync = (path4, opts, made) => {
+      const parent = dirname2(path4);
+      opts.recursive = false;
+      if (parent === path4) {
+        try {
+          return opts.mkdirSync(path4, opts);
+        } catch (er) {
+          if (er.code !== "EISDIR")
+            throw er;
+          else
+            return;
+        }
+      }
+      try {
+        opts.mkdirSync(path4, opts);
+        return made || path4;
+      } catch (er) {
+        if (er.code === "ENOENT")
+          return mkdirpManualSync(path4, opts, mkdirpManualSync(parent, opts, made));
+        if (er.code !== "EEXIST" && er.code !== "EROFS")
+          throw er;
+        try {
+          if (!opts.statSync(path4).isDirectory())
+            throw er;
+        } catch (_) {
+          throw er;
+        }
+      }
+    };
+    module2.exports = { mkdirpManual, mkdirpManualSync };
+  }
+});
+
+// node_modules/mkdirp/lib/mkdirp-native.js
+var require_mkdirp_native = __commonJS({
+  "node_modules/mkdirp/lib/mkdirp-native.js"(exports, module2) {
+    var { dirname: dirname2 } = require("path");
+    var { findMade, findMadeSync } = require_find_made();
+    var { mkdirpManual, mkdirpManualSync } = require_mkdirp_manual();
+    var mkdirpNative = (path4, opts) => {
+      opts.recursive = true;
+      const parent = dirname2(path4);
+      if (parent === path4)
+        return opts.mkdirAsync(path4, opts);
+      return findMade(opts, path4).then((made) => opts.mkdirAsync(path4, opts).then(() => made).catch((er) => {
+        if (er.code === "ENOENT")
+          return mkdirpManual(path4, opts);
+        else
+          throw er;
+      }));
+    };
+    var mkdirpNativeSync = (path4, opts) => {
+      opts.recursive = true;
+      const parent = dirname2(path4);
+      if (parent === path4)
+        return opts.mkdirSync(path4, opts);
+      const made = findMadeSync(opts, path4);
+      try {
+        opts.mkdirSync(path4, opts);
+        return made;
+      } catch (er) {
+        if (er.code === "ENOENT")
+          return mkdirpManualSync(path4, opts);
+        else
+          throw er;
+      }
+    };
+    module2.exports = { mkdirpNative, mkdirpNativeSync };
+  }
+});
+
+// node_modules/mkdirp/lib/use-native.js
+var require_use_native = __commonJS({
+  "node_modules/mkdirp/lib/use-native.js"(exports, module2) {
+    var fs4 = require("fs");
+    var version = process.env.__TESTING_MKDIRP_NODE_VERSION__ || process.version;
+    var versArr = version.replace(/^v/, "").split(".");
+    var hasNative = +versArr[0] > 10 || +versArr[0] === 10 && +versArr[1] >= 12;
+    var useNative = !hasNative ? () => false : (opts) => opts.mkdir === fs4.mkdir;
+    var useNativeSync = !hasNative ? () => false : (opts) => opts.mkdirSync === fs4.mkdirSync;
+    module2.exports = { useNative, useNativeSync };
+  }
+});
+
+// node_modules/mkdirp/index.js
+var require_mkdirp = __commonJS({
+  "node_modules/mkdirp/index.js"(exports, module2) {
+    var optsArg = require_opts_arg();
+    var pathArg = require_path_arg();
+    var { mkdirpNative, mkdirpNativeSync } = require_mkdirp_native();
+    var { mkdirpManual, mkdirpManualSync } = require_mkdirp_manual();
+    var { useNative, useNativeSync } = require_use_native();
+    var mkdirp2 = (path4, opts) => {
+      path4 = pathArg(path4);
+      opts = optsArg(opts);
+      return useNative(opts) ? mkdirpNative(path4, opts) : mkdirpManual(path4, opts);
+    };
+    var mkdirpSync = (path4, opts) => {
+      path4 = pathArg(path4);
+      opts = optsArg(opts);
+      return useNativeSync(opts) ? mkdirpNativeSync(path4, opts) : mkdirpManualSync(path4, opts);
+    };
+    mkdirp2.sync = mkdirpSync;
+    mkdirp2.native = (path4, opts) => mkdirpNative(pathArg(path4), optsArg(opts));
+    mkdirp2.manual = (path4, opts) => mkdirpManual(pathArg(path4), optsArg(opts));
+    mkdirp2.nativeSync = (path4, opts) => mkdirpNativeSync(pathArg(path4), optsArg(opts));
+    mkdirp2.manualSync = (path4, opts) => mkdirpManualSync(pathArg(path4), optsArg(opts));
+    module2.exports = mkdirp2;
   }
 });
 
@@ -7893,35 +8117,7 @@ var core3 = __toESM(require_core());
 var path = __toESM(require("path"));
 var fs = __toESM(require("fs"));
 var toolCache = __toESM(require_tool_cache());
-
-// src/command.ts
-var import_exec = __toESM(require_exec());
-async function exec(command, args, stdin) {
-  let output = Buffer.from([]);
-  let error = Buffer.from([]);
-  const options = {
-    silent: true,
-    ignoreReturnCode: true,
-    input: Buffer.from(stdin || ""),
-    listeners: {
-      stdout: (data) => {
-        output = Buffer.concat([output, data]);
-      },
-      stderr: (data) => {
-        error = Buffer.concat([error, data]);
-      }
-    }
-  };
-  const returnCode = await (0, import_exec.exec)(command, args, options);
-  const result = {
-    status: returnCode === 0,
-    output: output.toString().trim(),
-    error: error.toString().trim()
-  };
-  return result;
-}
-
-// src/install.ts
+var mkdirp = __toESM(require_mkdirp());
 async function downloadTool2(tool) {
   let toolDownloadPath = "";
   let cachedToolpath = toolCache.find(tool.name, tool.version);
@@ -7946,16 +8142,9 @@ async function downloadTool2(tool) {
   fs.chmodSync(toolPath, "777");
   if (tool.dest !== void 0 && tool.dest !== "") {
     const baseDir = process.env.XDG_CONFIG_HOME || (process.env.HOME || "") + "/.config";
-    const destDir = tool.dest.replace("${WAAS_TOOLS_DEST_DIR}", baseDir);
-    let result = await exec("mkdir", ["-p", `${destDir}`]);
-    if (!result.status) {
-      throw new Error(`cannot create destination directory ${destDir} for ${tool.name}`);
-    }
-    const destPath = path.join(destDir, tool.name);
-    result = await exec("cp", ["-f", toolPath, destPath]);
-    if (!result.status) {
-      throw new Error(`cannot copy ${tool.name} to ${destPath}`);
-    }
+    const destDir = tool.dest.replace("${KUSTOMIZE_PLUGINS_DIR}", baseDir);
+    mkdirp.sync(destDir);
+    fs.copyFileSync(toolPath, path.join(destDir, tool.name));
   }
   return toolPath;
 }

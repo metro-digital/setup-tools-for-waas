@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import * as toolCache from '@actions/tool-cache'
-import * as command from './command'
+import * as mkdirp from 'mkdirp'
 
 export type Tool = {
   name: string
@@ -43,17 +43,11 @@ export async function downloadTool (tool: Tool) {
   if (tool.dest !== undefined && tool.dest !== '') {
     const baseDir = (process.env.XDG_CONFIG_HOME || (process.env.HOME || '') + '/.config')
     // eslint-disable-next-line no-template-curly-in-string
-    const destDir = tool.dest.replace('${WAAS_TOOLS_DEST_DIR}', baseDir)
+    const destDir = tool.dest.replace('${KUSTOMIZE_PLUGINS_DIR}', baseDir)
 
-    let result = await command.exec('mkdir', ['-p', `${destDir}`])
-    if (!result.status) {
-      throw new Error(`cannot create destination directory ${destDir} for ${tool.name}`)
-    }
-    const destPath = path.join(destDir, tool.name)
-    result = await command.exec('cp', ['-f', toolPath, destPath])
-    if (!result.status) {
-      throw new Error(`cannot copy ${tool.name} to ${destPath}`)
-    }
+    mkdirp.sync(destDir)
+
+    fs.copyFileSync(toolPath, path.join(destDir, tool.name))
   }
 
   return toolPath
