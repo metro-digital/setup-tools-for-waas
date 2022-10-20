@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          npm install
+          npm ci
       - run: |
           npm run lint
   test-unit:
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          npm install
+          npm ci
       - run: |
           npm run test
   test-integration_waas_v1alpha3:
