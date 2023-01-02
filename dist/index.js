@@ -8047,3 +8047,8 @@ run().catch(core3.setFailed);
 0 && (module.exports = {
   run
 });
+/*! Bundled license information:
+
+js-yaml/dist/js-yaml.mjs:
+  (*! js-yaml 4.1.0 https://github.com/nodeca/js-yaml @license MIT *)
+*/
