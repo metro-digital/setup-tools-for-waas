@@ -311,7 +311,7 @@ function stringToBytes(str2) {
   }
   return bytes;
 }
-function v35_default(name, version2, hashfunc) {
+function v35_default(name, version3, hashfunc) {
   function generateUUID(value, namespace, buf, offset) {
     if (typeof value === "string") {
       value = stringToBytes(value);
@@ -326,7 +326,7 @@ function v35_default(name, version2, hashfunc) {
     bytes.set(namespace);
     bytes.set(value, namespace.length);
     bytes = hashfunc(bytes);
-    bytes[6] = bytes[6] & 15 | version2;
+    bytes[6] = bytes[6] & 15 | version3;
     bytes[8] = bytes[8] & 63 | 128;
     if (buf) {
       offset = offset || 0;
@@ -878,11 +878,11 @@ var require_lib = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -898,7 +898,7 @@ var require_lib = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -983,13 +983,13 @@ var require_lib = __commonJS({
       }
       readBody() {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+          return new Promise((resolve2) => __awaiter(this, void 0, void 0, function* () {
             let output = Buffer.alloc(0);
             this.message.on("data", (chunk) => {
               output = Buffer.concat([output, chunk]);
             });
             this.message.on("end", () => {
-              resolve(output.toString());
+              resolve2(output.toString());
             });
           }));
         });
@@ -1198,14 +1198,14 @@ var require_lib = __commonJS({
        */
       requestRaw(info2, data) {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve2, reject) => {
             function callbackForResult(err, res) {
               if (err) {
                 reject(err);
               } else if (!res) {
                 reject(new Error("Unknown error"));
               } else {
-                resolve(res);
+                resolve2(res);
               }
             }
             this.requestRawWithCallback(info2, data, callbackForResult);
@@ -1361,12 +1361,12 @@ var require_lib = __commonJS({
         return __awaiter(this, void 0, void 0, function* () {
           retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
           const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
-          return new Promise((resolve) => setTimeout(() => resolve(), ms));
+          return new Promise((resolve2) => setTimeout(() => resolve2(), ms));
         });
       }
       _processResponse(res, options) {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+          return new Promise((resolve2, reject) => __awaiter(this, void 0, void 0, function* () {
             const statusCode = res.message.statusCode || 0;
             const response = {
               statusCode,
@@ -1374,7 +1374,7 @@ var require_lib = __commonJS({
               headers: {}
             };
             if (statusCode === HttpCodes.NotFound) {
-              resolve(response);
+              resolve2(response);
             }
             function dateTimeDeserializer(key, value) {
               if (typeof value === "string") {
@@ -1413,7 +1413,7 @@ var require_lib = __commonJS({
               err.result = response.result;
               reject(err);
             } else {
-              resolve(response);
+              resolve2(response);
             }
           }));
         });
@@ -1430,11 +1430,11 @@ var require_auth = __commonJS({
     "use strict";
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -1450,7 +1450,7 @@ var require_auth = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -1534,11 +1534,11 @@ var require_oidc_utils = __commonJS({
     "use strict";
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -1554,7 +1554,7 @@ var require_oidc_utils = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -1632,11 +1632,11 @@ var require_summary = __commonJS({
     "use strict";
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -1652,7 +1652,7 @@ var require_summary = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -2004,11 +2004,11 @@ var require_core = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -2024,7 +2024,7 @@ var require_core = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -2233,11 +2233,11 @@ var require_io_util = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -2253,7 +2253,7 @@ var require_io_util = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -2409,11 +2409,11 @@ var require_io = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -2429,7 +2429,7 @@ var require_io = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -2773,74 +2773,74 @@ var require_semver = __commonJS({
       }
     }
     var i;
-    exports.parse = parse2;
-    function parse2(version2, options) {
+    exports.parse = parse3;
+    function parse3(version3, options) {
       if (!options || typeof options !== "object") {
         options = {
           loose: !!options,
           includePrerelease: false
         };
       }
-      if (version2 instanceof SemVer) {
-        return version2;
+      if (version3 instanceof SemVer) {
+        return version3;
       }
-      if (typeof version2 !== "string") {
+      if (typeof version3 !== "string") {
         return null;
       }
-      if (version2.length > MAX_LENGTH) {
+      if (version3.length > MAX_LENGTH) {
         return null;
       }
       var r = options.loose ? re[t.LOOSE] : re[t.FULL];
-      if (!r.test(version2)) {
+      if (!r.test(version3)) {
         return null;
       }
       try {
-        return new SemVer(version2, options);
+        return new SemVer(version3, options);
       } catch (er) {
         return null;
       }
     }
     exports.valid = valid;
-    function valid(version2, options) {
-      var v = parse2(version2, options);
+    function valid(version3, options) {
+      var v = parse3(version3, options);
       return v ? v.version : null;
     }
     exports.clean = clean;
-    function clean(version2, options) {
-      var s = parse2(version2.trim().replace(/^[=v]+/, ""), options);
+    function clean(version3, options) {
+      var s = parse3(version3.trim().replace(/^[=v]+/, ""), options);
       return s ? s.version : null;
     }
     exports.SemVer = SemVer;
-    function SemVer(version2, options) {
+    function SemVer(version3, options) {
       if (!options || typeof options !== "object") {
         options = {
           loose: !!options,
           includePrerelease: false
         };
       }
-      if (version2 instanceof SemVer) {
-        if (version2.loose === options.loose) {
-          return version2;
+      if (version3 instanceof SemVer) {
+        if (version3.loose === options.loose) {
+          return version3;
         } else {
-          version2 = version2.version;
+          version3 = version3.version;
         }
-      } else if (typeof version2 !== "string") {
-        throw new TypeError("Invalid Version: " + version2);
+      } else if (typeof version3 !== "string") {
+        throw new TypeError("Invalid Version: " + version3);
       }
-      if (version2.length > MAX_LENGTH) {
+      if (version3.length > MAX_LENGTH) {
         throw new TypeError("version is longer than " + MAX_LENGTH + " characters");
       }
       if (!(this instanceof SemVer)) {
-        return new SemVer(version2, options);
+        return new SemVer(version3, options);
       }
-      debug2("SemVer", version2, options);
+      debug2("SemVer", version3, options);
       this.options = options;
       this.loose = !!options.loose;
-      var m = version2.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL]);
+      var m = version3.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL]);
       if (!m) {
-        throw new TypeError("Invalid Version: " + version2);
+        throw new TypeError("Invalid Version: " + version3);
       }
-      this.raw = version2;
+      this.raw = version3;
       this.major = +m[1];
       this.minor = +m[2];
       this.patch = +m[3];
@@ -3023,24 +3023,24 @@ var require_semver = __commonJS({
       return this;
     };
     exports.inc = inc;
-    function inc(version2, release, loose, identifier) {
+    function inc(version3, release, loose, identifier) {
       if (typeof loose === "string") {
         identifier = loose;
         loose = void 0;
       }
       try {
-        return new SemVer(version2, loose).inc(release, identifier).version;
+        return new SemVer(version3, loose).inc(release, identifier).version;
       } catch (er) {
         return null;
       }
     }
     exports.diff = diff;
-    function diff(version1, version2) {
-      if (eq(version1, version2)) {
+    function diff(version1, version22) {
+      if (eq(version1, version22)) {
         return null;
       } else {
-        var v12 = parse2(version1);
-        var v2 = parse2(version2);
+        var v12 = parse3(version1);
+        var v2 = parse3(version22);
         var prefix = "";
         if (v12.prerelease.length || v2.prerelease.length) {
           prefix = "pre";
@@ -3219,19 +3219,19 @@ var require_semver = __commonJS({
     Comparator.prototype.toString = function() {
       return this.value;
     };
-    Comparator.prototype.test = function(version2) {
-      debug2("Comparator.test", version2, this.options.loose);
-      if (this.semver === ANY || version2 === ANY) {
+    Comparator.prototype.test = function(version3) {
+      debug2("Comparator.test", version3, this.options.loose);
+      if (this.semver === ANY || version3 === ANY) {
         return true;
       }
-      if (typeof version2 === "string") {
+      if (typeof version3 === "string") {
         try {
-          version2 = new SemVer(version2, this.options);
+          version3 = new SemVer(version3, this.options);
         } catch (er) {
           return false;
         }
       }
-      return cmp(version2, this.operator, this.semver, this.options);
+      return cmp(version3, this.operator, this.semver, this.options);
     };
     Comparator.prototype.intersects = function(comp, options) {
       if (!(comp instanceof Comparator)) {
@@ -3542,31 +3542,31 @@ var require_semver = __commonJS({
       }
       return (from + " " + to).trim();
     }
-    Range.prototype.test = function(version2) {
-      if (!version2) {
+    Range.prototype.test = function(version3) {
+      if (!version3) {
         return false;
       }
-      if (typeof version2 === "string") {
+      if (typeof version3 === "string") {
         try {
-          version2 = new SemVer(version2, this.options);
+          version3 = new SemVer(version3, this.options);
         } catch (er) {
           return false;
         }
       }
       for (var i2 = 0; i2 < this.set.length; i2++) {
-        if (testSet(this.set[i2], version2, this.options)) {
+        if (testSet(this.set[i2], version3, this.options)) {
           return true;
         }
       }
       return false;
     };
-    function testSet(set2, version2, options) {
+    function testSet(set2, version3, options) {
       for (var i2 = 0; i2 < set2.length; i2++) {
-        if (!set2[i2].test(version2)) {
+        if (!set2[i2].test(version3)) {
           return false;
         }
       }
-      if (version2.prerelease.length && !options.includePrerelease) {
+      if (version3.prerelease.length && !options.includePrerelease) {
         for (i2 = 0; i2 < set2.length; i2++) {
           debug2(set2[i2].semver);
           if (set2[i2].semver === ANY) {
@@ -3574,7 +3574,7 @@ var require_semver = __commonJS({
           }
           if (set2[i2].semver.prerelease.length > 0) {
             var allowed = set2[i2].semver;
-            if (allowed.major === version2.major && allowed.minor === version2.minor && allowed.patch === version2.patch) {
+            if (allowed.major === version3.major && allowed.minor === version3.minor && allowed.patch === version3.patch) {
               return true;
             }
           }
@@ -3584,13 +3584,13 @@ var require_semver = __commonJS({
       return true;
     }
     exports.satisfies = satisfies;
-    function satisfies(version2, range, options) {
+    function satisfies(version3, range, options) {
       try {
         range = new Range(range, options);
       } catch (er) {
         return false;
       }
-      return range.test(version2);
+      return range.test(version3);
     }
     exports.maxSatisfying = maxSatisfying;
     function maxSatisfying(versions, range, options) {
@@ -3682,16 +3682,16 @@ var require_semver = __commonJS({
       }
     }
     exports.ltr = ltr;
-    function ltr(version2, range, options) {
-      return outside(version2, range, "<", options);
+    function ltr(version3, range, options) {
+      return outside(version3, range, "<", options);
     }
     exports.gtr = gtr;
-    function gtr(version2, range, options) {
-      return outside(version2, range, ">", options);
+    function gtr(version3, range, options) {
+      return outside(version3, range, ">", options);
     }
     exports.outside = outside;
-    function outside(version2, range, hilo, options) {
-      version2 = new SemVer(version2, options);
+    function outside(version3, range, hilo, options) {
+      version3 = new SemVer(version3, options);
       range = new Range(range, options);
       var gtfn, ltefn, ltfn, comp, ecomp;
       switch (hilo) {
@@ -3712,7 +3712,7 @@ var require_semver = __commonJS({
         default:
           throw new TypeError('Must provide a hilo val of "<" or ">"');
       }
-      if (satisfies(version2, range, options)) {
+      if (satisfies(version3, range, options)) {
         return false;
       }
       for (var i2 = 0; i2 < range.set.length; ++i2) {
@@ -3734,17 +3734,17 @@ var require_semver = __commonJS({
         if (high.operator === comp || high.operator === ecomp) {
           return false;
         }
-        if ((!low.operator || low.operator === comp) && ltefn(version2, low.semver)) {
+        if ((!low.operator || low.operator === comp) && ltefn(version3, low.semver)) {
           return false;
-        } else if (low.operator === ecomp && ltfn(version2, low.semver)) {
+        } else if (low.operator === ecomp && ltfn(version3, low.semver)) {
           return false;
         }
       }
       return true;
     }
     exports.prerelease = prerelease;
-    function prerelease(version2, options) {
-      var parsed = parse2(version2, options);
+    function prerelease(version3, options) {
+      var parsed = parse3(version3, options);
       return parsed && parsed.prerelease.length ? parsed.prerelease : null;
     }
     exports.intersects = intersects;
@@ -3754,23 +3754,23 @@ var require_semver = __commonJS({
       return r1.intersects(r2);
     }
     exports.coerce = coerce;
-    function coerce(version2, options) {
-      if (version2 instanceof SemVer) {
-        return version2;
+    function coerce(version3, options) {
+      if (version3 instanceof SemVer) {
+        return version3;
       }
-      if (typeof version2 === "number") {
-        version2 = String(version2);
+      if (typeof version3 === "number") {
+        version3 = String(version3);
       }
-      if (typeof version2 !== "string") {
+      if (typeof version3 !== "string") {
         return null;
       }
       options = options || {};
       var match = null;
       if (!options.rtl) {
-        match = version2.match(re[t.COERCE]);
+        match = version3.match(re[t.COERCE]);
       } else {
         var next;
-        while ((next = re[t.COERCERTL].exec(version2)) && (!match || match.index + match[0].length !== version2.length)) {
+        while ((next = re[t.COERCERTL].exec(version3)) && (!match || match.index + match[0].length !== version3.length)) {
           if (!match || next.index + next[0].length !== match.index + match[0].length) {
             match = next;
           }
@@ -3781,7 +3781,7 @@ var require_semver = __commonJS({
       if (match === null) {
         return null;
       }
-      return parse2(match[2] + "." + (match[3] || "0") + "." + (match[4] || "0"), options);
+      return parse3(match[2] + "." + (match[3] || "0") + "." + (match[4] || "0"), options);
     }
   }
 });
@@ -3820,11 +3820,11 @@ var require_manifest = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -3840,7 +3840,7 @@ var require_manifest = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -3859,9 +3859,9 @@ var require_manifest = __commonJS({
         let match;
         let file;
         for (const candidate of candidates) {
-          const version2 = candidate.version;
-          core_1.debug(`check ${version2} satisfies ${versionSpec}`);
-          if (semver.satisfies(version2, versionSpec) && (!stable || candidate.stable === stable)) {
+          const version3 = candidate.version;
+          core_1.debug(`check ${version3} satisfies ${versionSpec}`);
+          if (semver.satisfies(version3, versionSpec) && (!stable || candidate.stable === stable)) {
             file = candidate.files.find((item) => {
               core_1.debug(`${item.arch}===${archFilter} && ${item.platform}===${platFilter}`);
               let chk = item.arch === archFilter && item.platform === platFilter;
@@ -3892,9 +3892,9 @@ var require_manifest = __commonJS({
     exports._findMatch = _findMatch;
     function _getOsVersion() {
       const plat = os.platform();
-      let version2 = "";
+      let version3 = "";
       if (plat === "darwin") {
-        version2 = cp.execSync("sw_vers -productVersion").toString();
+        version3 = cp.execSync("sw_vers -productVersion").toString();
       } else if (plat === "linux") {
         const lsbContents = module2.exports._readLinuxVersionFile();
         if (lsbContents) {
@@ -3902,13 +3902,13 @@ var require_manifest = __commonJS({
           for (const line of lines) {
             const parts = line.split("=");
             if (parts.length === 2 && (parts[0].trim() === "VERSION_ID" || parts[0].trim() === "DISTRIB_RELEASE")) {
-              version2 = parts[1].trim().replace(/^"/, "").replace(/"$/, "");
+              version3 = parts[1].trim().replace(/^"/, "").replace(/"$/, "");
               break;
             }
           }
         }
       }
-      return version2;
+      return version3;
     }
     exports._getOsVersion = _getOsVersion;
     function _readLinuxVersionFile() {
@@ -4034,11 +4034,11 @@ var require_toolrunner = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -4054,7 +4054,7 @@ var require_toolrunner = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -4282,7 +4282,7 @@ var require_toolrunner = __commonJS({
             this.toolPath = path4.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
           }
           this.toolPath = yield io.which(this.toolPath, true);
-          return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+          return new Promise((resolve2, reject) => __awaiter(this, void 0, void 0, function* () {
             this._debug(`exec tool: ${this.toolPath}`);
             this._debug("arguments:");
             for (const arg of this.args) {
@@ -4365,7 +4365,7 @@ var require_toolrunner = __commonJS({
               if (error) {
                 reject(error);
               } else {
-                resolve(exitCode);
+                resolve2(exitCode);
               }
             });
             if (this.options.input) {
@@ -4523,11 +4523,11 @@ var require_exec = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -4543,7 +4543,7 @@ var require_exec = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -4635,11 +4635,11 @@ var require_retry_helper = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -4655,7 +4655,7 @@ var require_retry_helper = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -4700,7 +4700,7 @@ var require_retry_helper = __commonJS({
       }
       sleep(seconds) {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve) => setTimeout(resolve, seconds * 1e3));
+          return new Promise((resolve2) => setTimeout(resolve2, seconds * 1e3));
         });
       }
     };
@@ -4742,11 +4742,11 @@ var require_tool_cache = __commonJS({
     };
     var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
+        return value instanceof P ? value : new P(function(resolve2) {
+          resolve2(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve, reject) {
+      return new (P || (P = Promise))(function(resolve2, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -4762,7 +4762,7 @@ var require_tool_cache = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -5052,39 +5052,39 @@ var require_tool_cache = __commonJS({
         yield exec_1.exec(`"${unzipPath}"`, args, { cwd: dest });
       });
     }
-    function cacheDir(sourceDir, tool, version2, arch) {
+    function cacheDir(sourceDir, tool, version3, arch) {
       return __awaiter(this, void 0, void 0, function* () {
-        version2 = semver.clean(version2) || version2;
+        version3 = semver.clean(version3) || version3;
         arch = arch || os.arch();
-        core4.debug(`Caching tool ${tool} ${version2} ${arch}`);
+        core4.debug(`Caching tool ${tool} ${version3} ${arch}`);
         core4.debug(`source dir: ${sourceDir}`);
         if (!fs4.statSync(sourceDir).isDirectory()) {
           throw new Error("sourceDir is not a directory");
         }
-        const destPath = yield _createToolPath(tool, version2, arch);
+        const destPath = yield _createToolPath(tool, version3, arch);
         for (const itemName of fs4.readdirSync(sourceDir)) {
           const s = path4.join(sourceDir, itemName);
           yield io.cp(s, destPath, { recursive: true });
         }
-        _completeToolPath(tool, version2, arch);
+        _completeToolPath(tool, version3, arch);
         return destPath;
       });
     }
     exports.cacheDir = cacheDir;
-    function cacheFile2(sourceFile, targetFile, tool, version2, arch) {
+    function cacheFile2(sourceFile, targetFile, tool, version3, arch) {
       return __awaiter(this, void 0, void 0, function* () {
-        version2 = semver.clean(version2) || version2;
+        version3 = semver.clean(version3) || version3;
         arch = arch || os.arch();
-        core4.debug(`Caching tool ${tool} ${version2} ${arch}`);
+        core4.debug(`Caching tool ${tool} ${version3} ${arch}`);
         core4.debug(`source file: ${sourceFile}`);
         if (!fs4.statSync(sourceFile).isFile()) {
           throw new Error("sourceFile is not a file");
         }
-        const destFolder = yield _createToolPath(tool, version2, arch);
+        const destFolder = yield _createToolPath(tool, version3, arch);
         const destPath = path4.join(destFolder, targetFile);
         core4.debug(`destination file ${destPath}`);
         yield io.cp(sourceFile, destPath);
-        _completeToolPath(tool, version2, arch);
+        _completeToolPath(tool, version3, arch);
         return destFolder;
       });
     }
@@ -5186,9 +5186,9 @@ var require_tool_cache = __commonJS({
         return dest;
       });
     }
-    function _createToolPath(tool, version2, arch) {
+    function _createToolPath(tool, version3, arch) {
       return __awaiter(this, void 0, void 0, function* () {
-        const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version2) || version2, arch || "");
+        const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version3) || version3, arch || "");
         core4.debug(`destination ${folderPath}`);
         const markerPath = `${folderPath}.complete`;
         yield io.rmRF(folderPath);
@@ -5197,8 +5197,8 @@ var require_tool_cache = __commonJS({
         return folderPath;
       });
     }
-    function _completeToolPath(tool, version2, arch) {
-      const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version2) || version2, arch || "");
+    function _completeToolPath(tool, version3, arch) {
+      const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version3) || version3, arch || "");
       const markerPath = `${folderPath}.complete`;
       fs4.writeFileSync(markerPath, "");
       core4.debug("finished caching tool");
@@ -5212,7 +5212,7 @@ var require_tool_cache = __commonJS({
     }
     exports.isExplicitVersion = isExplicitVersion;
     function evaluateVersions(versions, versionSpec) {
-      let version2 = "";
+      let version3 = "";
       core4.debug(`evaluating ${versions.length} versions`);
       versions = versions.sort((a, b) => {
         if (semver.gt(a, b)) {
@@ -5224,16 +5224,16 @@ var require_tool_cache = __commonJS({
         const potential = versions[i];
         const satisfied = semver.satisfies(potential, versionSpec);
         if (satisfied) {
-          version2 = potential;
+          version3 = potential;
           break;
         }
       }
-      if (version2) {
-        core4.debug(`matched: ${version2}`);
+      if (version3) {
+        core4.debug(`matched: ${version3}`);
       } else {
         core4.debug("match not found");
       }
-      return version2;
+      return version3;
     }
     exports.evaluateVersions = evaluateVersions;
     function _getCacheDirectory() {
@@ -5253,231 +5253,6 @@ var require_tool_cache = __commonJS({
     function _unique(values) {
       return Array.from(new Set(values));
     }
-  }
-});
-
-// node_modules/mkdirp/lib/opts-arg.js
-var require_opts_arg = __commonJS({
-  "node_modules/mkdirp/lib/opts-arg.js"(exports, module2) {
-    var { promisify } = require("util");
-    var fs4 = require("fs");
-    var optsArg = (opts) => {
-      if (!opts)
-        opts = { mode: 511, fs: fs4 };
-      else if (typeof opts === "object")
-        opts = { mode: 511, fs: fs4, ...opts };
-      else if (typeof opts === "number")
-        opts = { mode: opts, fs: fs4 };
-      else if (typeof opts === "string")
-        opts = { mode: parseInt(opts, 8), fs: fs4 };
-      else
-        throw new TypeError("invalid options argument");
-      opts.mkdir = opts.mkdir || opts.fs.mkdir || fs4.mkdir;
-      opts.mkdirAsync = promisify(opts.mkdir);
-      opts.stat = opts.stat || opts.fs.stat || fs4.stat;
-      opts.statAsync = promisify(opts.stat);
-      opts.statSync = opts.statSync || opts.fs.statSync || fs4.statSync;
-      opts.mkdirSync = opts.mkdirSync || opts.fs.mkdirSync || fs4.mkdirSync;
-      return opts;
-    };
-    module2.exports = optsArg;
-  }
-});
-
-// node_modules/mkdirp/lib/path-arg.js
-var require_path_arg = __commonJS({
-  "node_modules/mkdirp/lib/path-arg.js"(exports, module2) {
-    var platform = process.env.__TESTING_MKDIRP_PLATFORM__ || process.platform;
-    var { resolve, parse: parse2 } = require("path");
-    var pathArg = (path4) => {
-      if (/\0/.test(path4)) {
-        throw Object.assign(
-          new TypeError("path must be a string without null bytes"),
-          {
-            path: path4,
-            code: "ERR_INVALID_ARG_VALUE"
-          }
-        );
-      }
-      path4 = resolve(path4);
-      if (platform === "win32") {
-        const badWinChars = /[*|"<>?:]/;
-        const { root } = parse2(path4);
-        if (badWinChars.test(path4.substr(root.length))) {
-          throw Object.assign(new Error("Illegal characters in path."), {
-            path: path4,
-            code: "EINVAL"
-          });
-        }
-      }
-      return path4;
-    };
-    module2.exports = pathArg;
-  }
-});
-
-// node_modules/mkdirp/lib/find-made.js
-var require_find_made = __commonJS({
-  "node_modules/mkdirp/lib/find-made.js"(exports, module2) {
-    var { dirname: dirname2 } = require("path");
-    var findMade = (opts, parent, path4 = void 0) => {
-      if (path4 === parent)
-        return Promise.resolve();
-      return opts.statAsync(parent).then(
-        (st) => st.isDirectory() ? path4 : void 0,
-        // will fail later
-        (er) => er.code === "ENOENT" ? findMade(opts, dirname2(parent), parent) : void 0
-      );
-    };
-    var findMadeSync = (opts, parent, path4 = void 0) => {
-      if (path4 === parent)
-        return void 0;
-      try {
-        return opts.statSync(parent).isDirectory() ? path4 : void 0;
-      } catch (er) {
-        return er.code === "ENOENT" ? findMadeSync(opts, dirname2(parent), parent) : void 0;
-      }
-    };
-    module2.exports = { findMade, findMadeSync };
-  }
-});
-
-// node_modules/mkdirp/lib/mkdirp-manual.js
-var require_mkdirp_manual = __commonJS({
-  "node_modules/mkdirp/lib/mkdirp-manual.js"(exports, module2) {
-    var { dirname: dirname2 } = require("path");
-    var mkdirpManual = (path4, opts, made) => {
-      opts.recursive = false;
-      const parent = dirname2(path4);
-      if (parent === path4) {
-        return opts.mkdirAsync(path4, opts).catch((er) => {
-          if (er.code !== "EISDIR")
-            throw er;
-        });
-      }
-      return opts.mkdirAsync(path4, opts).then(() => made || path4, (er) => {
-        if (er.code === "ENOENT")
-          return mkdirpManual(parent, opts).then((made2) => mkdirpManual(path4, opts, made2));
-        if (er.code !== "EEXIST" && er.code !== "EROFS")
-          throw er;
-        return opts.statAsync(path4).then((st) => {
-          if (st.isDirectory())
-            return made;
-          else
-            throw er;
-        }, () => {
-          throw er;
-        });
-      });
-    };
-    var mkdirpManualSync = (path4, opts, made) => {
-      const parent = dirname2(path4);
-      opts.recursive = false;
-      if (parent === path4) {
-        try {
-          return opts.mkdirSync(path4, opts);
-        } catch (er) {
-          if (er.code !== "EISDIR")
-            throw er;
-          else
-            return;
-        }
-      }
-      try {
-        opts.mkdirSync(path4, opts);
-        return made || path4;
-      } catch (er) {
-        if (er.code === "ENOENT")
-          return mkdirpManualSync(path4, opts, mkdirpManualSync(parent, opts, made));
-        if (er.code !== "EEXIST" && er.code !== "EROFS")
-          throw er;
-        try {
-          if (!opts.statSync(path4).isDirectory())
-            throw er;
-        } catch (_) {
-          throw er;
-        }
-      }
-    };
-    module2.exports = { mkdirpManual, mkdirpManualSync };
-  }
-});
-
-// node_modules/mkdirp/lib/mkdirp-native.js
-var require_mkdirp_native = __commonJS({
-  "node_modules/mkdirp/lib/mkdirp-native.js"(exports, module2) {
-    var { dirname: dirname2 } = require("path");
-    var { findMade, findMadeSync } = require_find_made();
-    var { mkdirpManual, mkdirpManualSync } = require_mkdirp_manual();
-    var mkdirpNative = (path4, opts) => {
-      opts.recursive = true;
-      const parent = dirname2(path4);
-      if (parent === path4)
-        return opts.mkdirAsync(path4, opts);
-      return findMade(opts, path4).then((made) => opts.mkdirAsync(path4, opts).then(() => made).catch((er) => {
-        if (er.code === "ENOENT")
-          return mkdirpManual(path4, opts);
-        else
-          throw er;
-      }));
-    };
-    var mkdirpNativeSync = (path4, opts) => {
-      opts.recursive = true;
-      const parent = dirname2(path4);
-      if (parent === path4)
-        return opts.mkdirSync(path4, opts);
-      const made = findMadeSync(opts, path4);
-      try {
-        opts.mkdirSync(path4, opts);
-        return made;
-      } catch (er) {
-        if (er.code === "ENOENT")
-          return mkdirpManualSync(path4, opts);
-        else
-          throw er;
-      }
-    };
-    module2.exports = { mkdirpNative, mkdirpNativeSync };
-  }
-});
-
-// node_modules/mkdirp/lib/use-native.js
-var require_use_native = __commonJS({
-  "node_modules/mkdirp/lib/use-native.js"(exports, module2) {
-    var fs4 = require("fs");
-    var version2 = process.env.__TESTING_MKDIRP_NODE_VERSION__ || process.version;
-    var versArr = version2.replace(/^v/, "").split(".");
-    var hasNative = +versArr[0] > 10 || +versArr[0] === 10 && +versArr[1] >= 12;
-    var useNative = !hasNative ? () => false : (opts) => opts.mkdir === fs4.mkdir;
-    var useNativeSync = !hasNative ? () => false : (opts) => opts.mkdirSync === fs4.mkdirSync;
-    module2.exports = { useNative, useNativeSync };
-  }
-});
-
-// node_modules/mkdirp/index.js
-var require_mkdirp = __commonJS({
-  "node_modules/mkdirp/index.js"(exports, module2) {
-    var optsArg = require_opts_arg();
-    var pathArg = require_path_arg();
-    var { mkdirpNative, mkdirpNativeSync } = require_mkdirp_native();
-    var { mkdirpManual, mkdirpManualSync } = require_mkdirp_manual();
-    var { useNative, useNativeSync } = require_use_native();
-    var mkdirp2 = (path4, opts) => {
-      path4 = pathArg(path4);
-      opts = optsArg(opts);
-      return useNative(opts) ? mkdirpNative(path4, opts) : mkdirpManual(path4, opts);
-    };
-    var mkdirpSync = (path4, opts) => {
-      path4 = pathArg(path4);
-      opts = optsArg(opts);
-      return useNativeSync(opts) ? mkdirpNativeSync(path4, opts) : mkdirpManualSync(path4, opts);
-    };
-    mkdirp2.sync = mkdirpSync;
-    mkdirp2.native = (path4, opts) => mkdirpNative(pathArg(path4), optsArg(opts));
-    mkdirp2.manual = (path4, opts) => mkdirpManual(pathArg(path4), optsArg(opts));
-    mkdirp2.nativeSync = (path4, opts) => mkdirpNativeSync(pathArg(path4), optsArg(opts));
-    mkdirp2.manualSync = (path4, opts) => mkdirpManualSync(pathArg(path4), optsArg(opts));
-    module2.exports = mkdirp2;
   }
 });
 
@@ -8154,7 +7929,231 @@ var core3 = __toESM(require_core());
 var path = __toESM(require("path"));
 var fs = __toESM(require("fs"));
 var toolCache = __toESM(require_tool_cache());
-var mkdirp = __toESM(require_mkdirp());
+
+// node_modules/mkdirp/dist/mjs/mkdirp-manual.js
+var import_path = require("path");
+
+// node_modules/mkdirp/dist/mjs/opts-arg.js
+var import_fs = require("fs");
+var optsArg = (opts) => {
+  if (!opts) {
+    opts = { mode: 511 };
+  } else if (typeof opts === "object") {
+    opts = { mode: 511, ...opts };
+  } else if (typeof opts === "number") {
+    opts = { mode: opts };
+  } else if (typeof opts === "string") {
+    opts = { mode: parseInt(opts, 8) };
+  } else {
+    throw new TypeError("invalid options argument");
+  }
+  const resolved = opts;
+  const optsFs = opts.fs || {};
+  opts.mkdir = opts.mkdir || optsFs.mkdir || import_fs.mkdir;
+  opts.mkdirAsync = opts.mkdirAsync ? opts.mkdirAsync : async (path4, options) => {
+    return new Promise((res, rej) => resolved.mkdir(path4, options, (er, made) => er ? rej(er) : res(made)));
+  };
+  opts.stat = opts.stat || optsFs.stat || import_fs.stat;
+  opts.statAsync = opts.statAsync ? opts.statAsync : async (path4) => new Promise((res, rej) => resolved.stat(path4, (err, stats) => err ? rej(err) : res(stats)));
+  opts.statSync = opts.statSync || optsFs.statSync || import_fs.statSync;
+  opts.mkdirSync = opts.mkdirSync || optsFs.mkdirSync || import_fs.mkdirSync;
+  return resolved;
+};
+
+// node_modules/mkdirp/dist/mjs/mkdirp-manual.js
+var mkdirpManualSync = (path4, options, made) => {
+  const parent = (0, import_path.dirname)(path4);
+  const opts = { ...optsArg(options), recursive: false };
+  if (parent === path4) {
+    try {
+      return opts.mkdirSync(path4, opts);
+    } catch (er) {
+      const fer = er;
+      if (fer && fer.code !== "EISDIR") {
+        throw er;
+      }
+      return;
+    }
+  }
+  try {
+    opts.mkdirSync(path4, opts);
+    return made || path4;
+  } catch (er) {
+    const fer = er;
+    if (fer && fer.code === "ENOENT") {
+      return mkdirpManualSync(path4, opts, mkdirpManualSync(parent, opts, made));
+    }
+    if (fer && fer.code !== "EEXIST" && fer && fer.code !== "EROFS") {
+      throw er;
+    }
+    try {
+      if (!opts.statSync(path4).isDirectory())
+        throw er;
+    } catch (_) {
+      throw er;
+    }
+  }
+};
+var mkdirpManual = Object.assign(async (path4, options, made) => {
+  const opts = optsArg(options);
+  opts.recursive = false;
+  const parent = (0, import_path.dirname)(path4);
+  if (parent === path4) {
+    return opts.mkdirAsync(path4, opts).catch((er) => {
+      const fer = er;
+      if (fer && fer.code !== "EISDIR") {
+        throw er;
+      }
+    });
+  }
+  return opts.mkdirAsync(path4, opts).then(() => made || path4, async (er) => {
+    const fer = er;
+    if (fer && fer.code === "ENOENT") {
+      return mkdirpManual(parent, opts).then((made2) => mkdirpManual(path4, opts, made2));
+    }
+    if (fer && fer.code !== "EEXIST" && fer.code !== "EROFS") {
+      throw er;
+    }
+    return opts.statAsync(path4).then((st) => {
+      if (st.isDirectory()) {
+        return made;
+      } else {
+        throw er;
+      }
+    }, () => {
+      throw er;
+    });
+  });
+}, { sync: mkdirpManualSync });
+
+// node_modules/mkdirp/dist/mjs/mkdirp-native.js
+var import_path3 = require("path");
+
+// node_modules/mkdirp/dist/mjs/find-made.js
+var import_path2 = require("path");
+var findMade = async (opts, parent, path4) => {
+  if (path4 === parent) {
+    return;
+  }
+  return opts.statAsync(parent).then(
+    (st) => st.isDirectory() ? path4 : void 0,
+    // will fail later
+    // will fail later
+    (er) => {
+      const fer = er;
+      return fer && fer.code === "ENOENT" ? findMade(opts, (0, import_path2.dirname)(parent), parent) : void 0;
+    }
+  );
+};
+var findMadeSync = (opts, parent, path4) => {
+  if (path4 === parent) {
+    return void 0;
+  }
+  try {
+    return opts.statSync(parent).isDirectory() ? path4 : void 0;
+  } catch (er) {
+    const fer = er;
+    return fer && fer.code === "ENOENT" ? findMadeSync(opts, (0, import_path2.dirname)(parent), parent) : void 0;
+  }
+};
+
+// node_modules/mkdirp/dist/mjs/mkdirp-native.js
+var mkdirpNativeSync = (path4, options) => {
+  const opts = optsArg(options);
+  opts.recursive = true;
+  const parent = (0, import_path3.dirname)(path4);
+  if (parent === path4) {
+    return opts.mkdirSync(path4, opts);
+  }
+  const made = findMadeSync(opts, path4);
+  try {
+    opts.mkdirSync(path4, opts);
+    return made;
+  } catch (er) {
+    const fer = er;
+    if (fer && fer.code === "ENOENT") {
+      return mkdirpManualSync(path4, opts);
+    } else {
+      throw er;
+    }
+  }
+};
+var mkdirpNative = Object.assign(async (path4, options) => {
+  const opts = { ...optsArg(options), recursive: true };
+  const parent = (0, import_path3.dirname)(path4);
+  if (parent === path4) {
+    return await opts.mkdirAsync(path4, opts);
+  }
+  return findMade(opts, path4).then((made) => opts.mkdirAsync(path4, opts).then((m) => made || m).catch((er) => {
+    const fer = er;
+    if (fer && fer.code === "ENOENT") {
+      return mkdirpManual(path4, opts);
+    } else {
+      throw er;
+    }
+  }));
+}, { sync: mkdirpNativeSync });
+
+// node_modules/mkdirp/dist/mjs/path-arg.js
+var import_path4 = require("path");
+var platform = process.env.__TESTING_MKDIRP_PLATFORM__ || process.platform;
+var pathArg = (path4) => {
+  if (/\0/.test(path4)) {
+    throw Object.assign(new TypeError("path must be a string without null bytes"), {
+      path: path4,
+      code: "ERR_INVALID_ARG_VALUE"
+    });
+  }
+  path4 = (0, import_path4.resolve)(path4);
+  if (platform === "win32") {
+    const badWinChars = /[*|"<>?:]/;
+    const { root } = (0, import_path4.parse)(path4);
+    if (badWinChars.test(path4.substring(root.length))) {
+      throw Object.assign(new Error("Illegal characters in path."), {
+        path: path4,
+        code: "EINVAL"
+      });
+    }
+  }
+  return path4;
+};
+
+// node_modules/mkdirp/dist/mjs/use-native.js
+var import_fs2 = require("fs");
+var version2 = process.env.__TESTING_MKDIRP_NODE_VERSION__ || process.version;
+var versArr = version2.replace(/^v/, "").split(".");
+var hasNative = +versArr[0] > 10 || +versArr[0] === 10 && +versArr[1] >= 12;
+var useNativeSync = !hasNative ? () => false : (opts) => optsArg(opts).mkdirSync === import_fs2.mkdirSync;
+var useNative = Object.assign(!hasNative ? () => false : (opts) => optsArg(opts).mkdir === import_fs2.mkdir, {
+  sync: useNativeSync
+});
+
+// node_modules/mkdirp/dist/mjs/index.js
+var mkdirpSync = (path4, opts) => {
+  path4 = pathArg(path4);
+  const resolved = optsArg(opts);
+  return useNativeSync(resolved) ? mkdirpNativeSync(path4, resolved) : mkdirpManualSync(path4, resolved);
+};
+var mkdirp = Object.assign(async (path4, opts) => {
+  path4 = pathArg(path4);
+  const resolved = optsArg(opts);
+  return useNative(resolved) ? mkdirpNative(path4, resolved) : mkdirpManual(path4, resolved);
+}, {
+  mkdirpSync,
+  mkdirpNative,
+  mkdirpNativeSync,
+  mkdirpManual,
+  mkdirpManualSync,
+  sync: mkdirpSync,
+  native: mkdirpNative,
+  nativeSync: mkdirpNativeSync,
+  manual: mkdirpManual,
+  manualSync: mkdirpManualSync,
+  useNative,
+  useNativeSync
+});
+
+// src/install.ts
 async function downloadTool2(tool) {
   let toolDownloadPath = "";
   let cachedToolpath = toolCache.find(tool.name, tool.version);
@@ -8180,7 +8179,7 @@ async function downloadTool2(tool) {
   if (tool.dest !== void 0 && tool.dest !== "") {
     const baseDir = process.env.XDG_CONFIG_HOME || (process.env.HOME || "") + "/.config";
     const destDir = tool.dest.replace("${KUSTOMIZE_PLUGINS_DIR}", baseDir);
-    mkdirp.sync(destDir);
+    (void 0)(destDir);
     fs.copyFileSync(toolPath, path.join(destDir, tool.name));
   }
   return toolPath;
@@ -8188,15 +8187,15 @@ async function downloadTool2(tool) {
 
 // src/gcp.ts
 var core2 = __toESM(require_core());
-var import_fs = require("fs");
-var import_path = __toESM(require("path"));
+var import_fs3 = require("fs");
+var import_path5 = __toESM(require("path"));
 var import_crypto4 = require("crypto");
 async function setupServiceAccount(serviceAccountKey) {
   try {
     const credsDir = String(process.env.GITHUB_WORKSPACE);
-    const credsPath = import_path.default.join(credsDir, (0, import_crypto4.randomUUID)());
+    const credsPath = import_path5.default.join(credsDir, (0, import_crypto4.randomUUID)());
     const serviceAccount = parseServiceAccountKey(serviceAccountKey);
-    await import_fs.promises.writeFile(credsPath, JSON.stringify(serviceAccount, null, 2));
+    await import_fs3.promises.writeFile(credsPath, JSON.stringify(serviceAccount, null, 2));
     core2.exportVariable("GCLOUD_PROJECT", serviceAccount.project_id);
     core2.exportVariable("GOOGLE_APPLICATION_CREDENTIALS", credsPath);
     core2.info("Successfully exported Default Application Credentials");
@@ -8216,8 +8215,8 @@ function parseServiceAccountKey(serviceAccountKey) {
 
 // src/main.ts
 async function run() {
-  const version2 = core3.getInput("version");
-  if (!version2) {
+  const version3 = core3.getInput("version");
+  if (!version3) {
     core3.setFailed("version cannot be empty");
     return;
   }
@@ -8225,7 +8224,7 @@ async function run() {
   if (serviceAccountKey) {
     await setupServiceAccount(serviceAccountKey);
   }
-  const configFilepath = path3.join(__dirname, `${version2.replace("/", ".")}.yaml`);
+  const configFilepath = path3.join(__dirname, `${version3.replace("/", ".")}.yaml`);
   core3.debug(`Reading config from ${configFilepath}`);
   const tools = load(fs3.readFileSync(configFilepath, "utf8"));
   for (const tool of tools) {
