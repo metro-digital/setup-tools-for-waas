@@ -2127,10 +2127,10 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       command_1.issueCommand("error", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
     exports.error = error;
-    function warning(message, properties = {}) {
+    function warning2(message, properties = {}) {
       command_1.issueCommand("warning", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
-    exports.warning = warning;
+    exports.warning = warning2;
     function notice(message, properties = {}) {
       command_1.issueCommand("notice", utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
     }
@@ -4662,7 +4662,7 @@ var require_retry_helper = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RetryHelper = void 0;
-    var core4 = __importStar(require_core());
+    var core5 = __importStar(require_core());
     var RetryHelper = class {
       constructor(maxAttempts, minSeconds, maxSeconds) {
         if (maxAttempts < 1) {
@@ -4685,10 +4685,10 @@ var require_retry_helper = __commonJS({
               if (isRetryable && !isRetryable(err)) {
                 throw err;
               }
-              core4.info(err.message);
+              core5.info(err.message);
             }
             const seconds = this.getSleepAmount();
-            core4.info(`Waiting ${seconds} seconds before trying again`);
+            core5.info(`Waiting ${seconds} seconds before trying again`);
             yield this.sleep(seconds);
             attempt++;
           }
@@ -4772,7 +4772,7 @@ var require_tool_cache = __commonJS({
     };
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.evaluateVersions = exports.isExplicitVersion = exports.findFromManifest = exports.getManifestFromRepo = exports.findAllVersions = exports.find = exports.cacheFile = exports.cacheDir = exports.extractZip = exports.extractXar = exports.extractTar = exports.extract7z = exports.downloadTool = exports.HTTPError = void 0;
-    var core4 = __importStar(require_core());
+    var core5 = __importStar(require_core());
     var io = __importStar(require_io());
     var fs4 = __importStar(require("fs"));
     var mm = __importStar(require_manifest());
@@ -4801,8 +4801,8 @@ var require_tool_cache = __commonJS({
       return __awaiter(this, void 0, void 0, function* () {
         dest = dest || path4.join(_getTempDirectory(), v4_1.default());
         yield io.mkdirP(path4.dirname(dest));
-        core4.debug(`Downloading ${url}`);
-        core4.debug(`Destination ${dest}`);
+        core5.debug(`Downloading ${url}`);
+        core5.debug(`Destination ${dest}`);
         const maxAttempts = 3;
         const minSeconds = _getGlobal("TEST_DOWNLOAD_TOOL_RETRY_MIN_SECONDS", 10);
         const maxSeconds = _getGlobal("TEST_DOWNLOAD_TOOL_RETRY_MAX_SECONDS", 20);
@@ -4829,7 +4829,7 @@ var require_tool_cache = __commonJS({
           allowRetries: false
         });
         if (auth) {
-          core4.debug("set auth");
+          core5.debug("set auth");
           if (headers === void 0) {
             headers = {};
           }
@@ -4838,7 +4838,7 @@ var require_tool_cache = __commonJS({
         const response = yield http.get(url, headers);
         if (response.message.statusCode !== 200) {
           const err = new HTTPError(response.message.statusCode);
-          core4.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
+          core5.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
           throw err;
         }
         const pipeline = util.promisify(stream.pipeline);
@@ -4847,16 +4847,16 @@ var require_tool_cache = __commonJS({
         let succeeded = false;
         try {
           yield pipeline(readStream, fs4.createWriteStream(dest));
-          core4.debug("download complete");
+          core5.debug("download complete");
           succeeded = true;
           return dest;
         } finally {
           if (!succeeded) {
-            core4.debug("download failed");
+            core5.debug("download failed");
             try {
               yield io.rmRF(dest);
             } catch (err) {
-              core4.debug(`Failed to delete '${dest}'. ${err.message}`);
+              core5.debug(`Failed to delete '${dest}'. ${err.message}`);
             }
           }
         }
@@ -4871,7 +4871,7 @@ var require_tool_cache = __commonJS({
         process.chdir(dest);
         if (_7zPath) {
           try {
-            const logLevel = core4.isDebug() ? "-bb1" : "-bb0";
+            const logLevel = core5.isDebug() ? "-bb1" : "-bb0";
             const args = [
               "x",
               logLevel,
@@ -4921,7 +4921,7 @@ var require_tool_cache = __commonJS({
           throw new Error("parameter 'file' is required");
         }
         dest = yield _createExtractFolder(dest);
-        core4.debug("Checking tar --version");
+        core5.debug("Checking tar --version");
         let versionOutput = "";
         yield exec_1.exec("tar --version", [], {
           ignoreReturnCode: true,
@@ -4931,7 +4931,7 @@ var require_tool_cache = __commonJS({
             stderr: (data) => versionOutput += data.toString()
           }
         });
-        core4.debug(versionOutput.trim());
+        core5.debug(versionOutput.trim());
         const isGnuTar = versionOutput.toUpperCase().includes("GNU TAR");
         let args;
         if (flags instanceof Array) {
@@ -4939,7 +4939,7 @@ var require_tool_cache = __commonJS({
         } else {
           args = [flags];
         }
-        if (core4.isDebug() && !flags.includes("v")) {
+        if (core5.isDebug() && !flags.includes("v")) {
           args.push("-v");
         }
         let destArg = dest;
@@ -4971,7 +4971,7 @@ var require_tool_cache = __commonJS({
           args = [flags];
         }
         args.push("-x", "-C", dest, "-f", file);
-        if (core4.isDebug()) {
+        if (core5.isDebug()) {
           args.push("-v");
         }
         const xarPath = yield io.which("xar", true);
@@ -5016,7 +5016,7 @@ var require_tool_cache = __commonJS({
             "-Command",
             pwshCommand
           ];
-          core4.debug(`Using pwsh at path: ${pwshPath}`);
+          core5.debug(`Using pwsh at path: ${pwshPath}`);
           yield exec_1.exec(`"${pwshPath}"`, args);
         } else {
           const powershellCommand = [
@@ -5036,7 +5036,7 @@ var require_tool_cache = __commonJS({
             powershellCommand
           ];
           const powershellPath = yield io.which("powershell", true);
-          core4.debug(`Using powershell at path: ${powershellPath}`);
+          core5.debug(`Using powershell at path: ${powershellPath}`);
           yield exec_1.exec(`"${powershellPath}"`, args);
         }
       });
@@ -5045,7 +5045,7 @@ var require_tool_cache = __commonJS({
       return __awaiter(this, void 0, void 0, function* () {
         const unzipPath = yield io.which("unzip", true);
         const args = [file];
-        if (!core4.isDebug()) {
+        if (!core5.isDebug()) {
           args.unshift("-q");
         }
         args.unshift("-o");
@@ -5056,8 +5056,8 @@ var require_tool_cache = __commonJS({
       return __awaiter(this, void 0, void 0, function* () {
         version3 = semver.clean(version3) || version3;
         arch = arch || os.arch();
-        core4.debug(`Caching tool ${tool} ${version3} ${arch}`);
-        core4.debug(`source dir: ${sourceDir}`);
+        core5.debug(`Caching tool ${tool} ${version3} ${arch}`);
+        core5.debug(`source dir: ${sourceDir}`);
         if (!fs4.statSync(sourceDir).isDirectory()) {
           throw new Error("sourceDir is not a directory");
         }
@@ -5075,14 +5075,14 @@ var require_tool_cache = __commonJS({
       return __awaiter(this, void 0, void 0, function* () {
         version3 = semver.clean(version3) || version3;
         arch = arch || os.arch();
-        core4.debug(`Caching tool ${tool} ${version3} ${arch}`);
-        core4.debug(`source file: ${sourceFile}`);
+        core5.debug(`Caching tool ${tool} ${version3} ${arch}`);
+        core5.debug(`source file: ${sourceFile}`);
         if (!fs4.statSync(sourceFile).isFile()) {
           throw new Error("sourceFile is not a file");
         }
         const destFolder = yield _createToolPath(tool, version3, arch);
         const destPath = path4.join(destFolder, targetFile);
-        core4.debug(`destination file ${destPath}`);
+        core5.debug(`destination file ${destPath}`);
         yield io.cp(sourceFile, destPath);
         _completeToolPath(tool, version3, arch);
         return destFolder;
@@ -5106,12 +5106,12 @@ var require_tool_cache = __commonJS({
       if (versionSpec) {
         versionSpec = semver.clean(versionSpec) || "";
         const cachePath = path4.join(_getCacheDirectory(), toolName, versionSpec, arch);
-        core4.debug(`checking cache: ${cachePath}`);
+        core5.debug(`checking cache: ${cachePath}`);
         if (fs4.existsSync(cachePath) && fs4.existsSync(`${cachePath}.complete`)) {
-          core4.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
+          core5.debug(`Found tool in cache ${toolName} ${versionSpec} ${arch}`);
           toolPath = cachePath;
         } else {
-          core4.debug("not found");
+          core5.debug("not found");
         }
       }
       return toolPath;
@@ -5142,7 +5142,7 @@ var require_tool_cache = __commonJS({
         const http = new httpm.HttpClient("tool-cache");
         const headers = {};
         if (auth) {
-          core4.debug("set auth");
+          core5.debug("set auth");
           headers.authorization = auth;
         }
         const response = yield http.getJson(treeUrl, headers);
@@ -5163,7 +5163,7 @@ var require_tool_cache = __commonJS({
           try {
             releases = JSON.parse(versionsRaw);
           } catch (_a) {
-            core4.debug("Invalid json");
+            core5.debug("Invalid json");
           }
         }
         return releases;
@@ -5189,7 +5189,7 @@ var require_tool_cache = __commonJS({
     function _createToolPath(tool, version3, arch) {
       return __awaiter(this, void 0, void 0, function* () {
         const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version3) || version3, arch || "");
-        core4.debug(`destination ${folderPath}`);
+        core5.debug(`destination ${folderPath}`);
         const markerPath = `${folderPath}.complete`;
         yield io.rmRF(folderPath);
         yield io.rmRF(markerPath);
@@ -5201,19 +5201,19 @@ var require_tool_cache = __commonJS({
       const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version3) || version3, arch || "");
       const markerPath = `${folderPath}.complete`;
       fs4.writeFileSync(markerPath, "");
-      core4.debug("finished caching tool");
+      core5.debug("finished caching tool");
     }
     function isExplicitVersion(versionSpec) {
       const c = semver.clean(versionSpec) || "";
-      core4.debug(`isExplicit: ${c}`);
+      core5.debug(`isExplicit: ${c}`);
       const valid = semver.valid(c) != null;
-      core4.debug(`explicit? ${valid}`);
+      core5.debug(`explicit? ${valid}`);
       return valid;
     }
     exports.isExplicitVersion = isExplicitVersion;
     function evaluateVersions(versions, versionSpec) {
       let version3 = "";
-      core4.debug(`evaluating ${versions.length} versions`);
+      core5.debug(`evaluating ${versions.length} versions`);
       versions = versions.sort((a, b) => {
         if (semver.gt(a, b)) {
           return 1;
@@ -5229,9 +5229,9 @@ var require_tool_cache = __commonJS({
         }
       }
       if (version3) {
-        core4.debug(`matched: ${version3}`);
+        core5.debug(`matched: ${version3}`);
       } else {
-        core4.debug("match not found");
+        core5.debug("match not found");
       }
       return version3;
     }
@@ -7923,7 +7923,7 @@ var safeLoadAll = renamed("safeLoadAll", "loadAll");
 var safeDump = renamed("safeDump", "dump");
 
 // src/main.ts
-var core3 = __toESM(require_core());
+var core4 = __toESM(require_core());
 
 // src/install.ts
 var path = __toESM(require("path"));
@@ -8213,27 +8213,36 @@ function parseServiceAccountKey(serviceAccountKey) {
   return JSON.parse(serviceAccount);
 }
 
+// src/warning.ts
+var core3 = __toESM(require_core());
+function warnForDeprecatedVersion(version3) {
+  if (/^waas\/v2alpha[1-4]$/.test(version3)) {
+    core3.warning(`The version ${version3} is deprecated and will be decommissioned on 01.03.2023. Please update the setup-tools-for-waas action to use version waas/v2(latest) instead.`);
+  }
+}
+
 // src/main.ts
 async function run() {
-  const version3 = core3.getInput("version");
+  const version3 = core4.getInput("version");
   if (!version3) {
-    core3.setFailed("version cannot be empty");
+    core4.setFailed("version cannot be empty");
     return;
   }
-  const serviceAccountKey = core3.getInput("gcp_sa_key");
+  warnForDeprecatedVersion(version3);
+  const serviceAccountKey = core4.getInput("gcp_sa_key");
   if (serviceAccountKey) {
     await setupServiceAccount(serviceAccountKey);
   }
   const configFilepath = path3.join(__dirname, `${version3.replace("/", ".")}.yaml`);
-  core3.debug(`Reading config from ${configFilepath}`);
+  core4.debug(`Reading config from ${configFilepath}`);
   const tools = load(fs3.readFileSync(configFilepath, "utf8"));
   for (const tool of tools) {
     const cachedPath = await downloadTool2(tool);
-    core3.debug(`Cached path ${cachedPath}`);
-    core3.addPath(path3.dirname(cachedPath));
+    core4.debug(`Cached path ${cachedPath}`);
+    core4.addPath(path3.dirname(cachedPath));
   }
 }
-run().catch(core3.setFailed);
+run().catch(core4.setFailed);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   run
