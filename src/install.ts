@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import * as toolCache from '@actions/tool-cache'
-import * as mkdirp from 'mkdirp'
+import { mkdirpSync } from 'mkdirp'
 
 export type Tool = {
   name: string
@@ -45,7 +45,7 @@ export async function downloadTool (tool: Tool) {
     // eslint-disable-next-line no-template-curly-in-string
     const destDir = tool.dest.replace('${KUSTOMIZE_PLUGINS_DIR}', baseDir)
 
-    mkdirp.sync(destDir)
+    mkdirpSync(destDir)
 
     fs.copyFileSync(toolPath, path.join(destDir, tool.name))
   }

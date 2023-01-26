@@ -8179,7 +8179,7 @@ async function downloadTool2(tool) {
   if (tool.dest !== void 0 && tool.dest !== "") {
     const baseDir = process.env.XDG_CONFIG_HOME || (process.env.HOME || "") + "/.config";
     const destDir = tool.dest.replace("${KUSTOMIZE_PLUGINS_DIR}", baseDir);
-    (void 0)(destDir);
+    mkdirpSync(destDir);
     fs.copyFileSync(toolPath, path.join(destDir, tool.name));
   }
   return toolPath;
