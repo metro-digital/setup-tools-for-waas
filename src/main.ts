@@ -4,7 +4,7 @@ import * as yaml from 'js-yaml'
 import * as core from '@actions/core'
 import * as install from './install'
 import * as gcp from './gcp'
-import { warnForDeprecatedVersion } from './warning'
+import { validateVersion } from './validateVersion'
 
 export async function run (): Promise<void> {
   const version = core.getInput('version')
@@ -13,7 +13,8 @@ export async function run (): Promise<void> {
     return
   }
 
-  warnForDeprecatedVersion(version)
+  validateVersion(version)
+
   const serviceAccountKey = core.getInput('gcp_sa_key')
   if (serviceAccountKey) {
     await gcp.setupServiceAccount(serviceAccountKey)
