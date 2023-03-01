@@ -11,6 +11,6 @@ export function validateVersion (version: string) {
   if (
     validVersions.includes(version) === false
   ) {
-    throw new Error(`The version ${version} is deprecated and is decommissioned on 01.03.2023. Please update the setup-tools-for-waas action to use version waas/v2 instead.`)
+    throw new Error(`The version ${version} is not supported. Please use a supported version, e.g. waas/v2 instead.`)
   }
 }

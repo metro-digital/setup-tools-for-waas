@@ -8224,7 +8224,7 @@ var validVersions = [
 ];
 function validateVersion(version3) {
   if (validVersions.includes(version3) === false) {
-    throw new Error(`The version ${version3} is deprecated and is decommissioned on 01.03.2023. Please update the setup-tools-for-waas action to use version waas/v2 instead.`);
+    throw new Error(`The version ${version3} is not supported. Please use a supported version, e.g. waas/v2 instead.`);
   }
 }
 
