@@ -4,14 +4,14 @@ The action to setup the tools required for WaaS.
 
 For latest version, `waas/v2`, following tools are set up.
 
-- kubectl 1.22.12
+- kubectl 1.24.14
 - kustomize 4.4.1
 - skaffold 1.35.0
 - sops 3.6.1
 - yq 3.4.1
 - SopsSecretGenerator 1.3.2
 - kenv 1.0.2
-- KGCPSecret 1.0.3
+- KGCPSecret 1.2.0
 
 ## Inputs
 
