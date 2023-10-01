@@ -10,7 +10,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           npm ci
       - run: |
@@ -18,7 +18,7 @@ jobs:
   test-unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           npm ci
       - run: |
@@ -27,7 +27,7 @@ jobs:
     name: 'waas/v1alpha3'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'waas/v1alpha3'
         uses: ./
         with:
@@ -36,7 +36,7 @@ jobs:
     name: 'waas/v1alpha4'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'waas/v1alpha4'
         uses: ./
         with:
@@ -45,7 +45,7 @@ jobs:
     name: 'waas/v1beta1'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'waas/v1beta1'
         uses: ./
         with:
@@ -54,7 +54,7 @@ jobs:
     name: 'waas/v2'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'waas/v2'
         uses: ./
         with:
@@ -63,7 +63,7 @@ jobs:
     name: 'waas/latest'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: 'waas/latest'
         uses: ./
         with:
@@ -72,7 +72,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: checkout repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - uses: actions/setup-node@v3
       with:
         node-version: '16'
