@@ -12,5 +12,5 @@ inputs:
       value can be raw or base64-encoded.
     required: false
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
