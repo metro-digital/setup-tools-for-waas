@@ -26,7 +26,7 @@
     "@fastify/pre-commit": "^2.0.2",
     "@tsconfig/node20": "^20.1.2",
     "@types/jest": "^29.5.5",
-    "@types/js-yaml": "^4.0.6",
+    "@types/js-yaml": "^4.0.7",
     "@types/node": "^20.8.6",
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.5",
