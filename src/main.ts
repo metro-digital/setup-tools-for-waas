@@ -1,33 +1,33 @@
-import * as path from 'path'
-import * as fs from 'fs'
-import * as yaml from 'js-yaml'
-import * as core from '@actions/core'
-import * as install from './install'
-import * as gcp from './gcp'
-import { validateVersion } from './validateVersion'
+import * as path from "node:path";
+import * as fs from "node:fs";
+import * as yaml from "js-yaml";
+import * as core from "@actions/core";
+import * as install from "./install";
+import * as gcp from "./gcp";
+import { validateVersion } from "./validateVersion";
 
-export async function run (): Promise<void> {
-  const version = core.getInput('version')
+export async function run(): Promise<void> {
+  const version = core.getInput("version");
   if (!version) {
-    core.setFailed('version cannot be empty')
-    return
+    core.setFailed("version cannot be empty");
+    return;
   }
 
-  validateVersion(version)
+  validateVersion(version);
 
-  const serviceAccountKey = core.getInput('gcp_sa_key')
+  const serviceAccountKey = core.getInput("gcp_sa_key");
   if (serviceAccountKey) {
-    await gcp.setupServiceAccount(serviceAccountKey)
+    await gcp.setupServiceAccount(serviceAccountKey);
   }
 
-  const configFilepath = path.join(__dirname, `${version.replace('/', '.')}.yaml`)
-  core.debug(`Reading config from ${configFilepath}`)
-  const tools = yaml.load(fs.readFileSync(configFilepath, 'utf8')) as install.Tools
+  const configFilepath = path.join(__dirname, `${version.replace("/", ".")}.yaml`);
+  core.debug(`Reading config from ${configFilepath}`);
+  const tools = yaml.load(fs.readFileSync(configFilepath, "utf8")) as install.Tools;
   for (const tool of tools) {
-    const cachedPath = await install.downloadTool(tool)
-    core.debug(`Cached path ${cachedPath}`)
-    core.addPath(path.dirname(cachedPath))
+    const cachedPath = await install.downloadTool(tool);
+    core.debug(`Cached path ${cachedPath}`);
+    core.addPath(path.dirname(cachedPath));
   }
 }
 
-run().catch(core.setFailed)
+run().catch(core.setFailed);

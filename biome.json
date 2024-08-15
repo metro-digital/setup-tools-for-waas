@@ -1,0 +1,23 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "files": {
+    "include": ["src/*.ts"]
+  },
+  "formatter": {
+    "enabled": true,
+    "include": ["src/*.ts", "tests/*.ts"],
+    "indentWidth": 2,
+    "indentStyle": "space",
+    "lineWidth": 120
+  },
+  "linter": {
+    "enabled": true,
+    "include": ["src/*.ts"],
+    "rules": {
+      "recommended": true
+    }
+  }
+}
