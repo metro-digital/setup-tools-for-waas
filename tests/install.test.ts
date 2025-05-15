@@ -24,11 +24,11 @@ describe("installer tests", () => {
     stdoutSpy.mockRestore();
   });
 
-  it("Acquires kubectl version 1.17.17", async () => {
+  it("Acquires kubectl version 1.27.10", async () => {
     const tool = {
       name: "kubectl",
-      version: "1.17.17",
-      url: `https://storage.googleapis.com/kubernetes-release/release/v1.17.17/bin/${process.platform}/amd64/kubectl`,
+      version: "1.27.10",
+      url: `https://storage.googleapis.com/kubernetes-release/release/v1.27.10/bin/${process.platform}/amd64/kubectl`,
     };
     await install.downloadTool(tool);
 
