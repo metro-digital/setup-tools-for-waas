@@ -33,7 +33,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.0.3",
     "esbuild": "^0.25.5",
-    "jest": "^30.0.2",
+    "jest": "^30.0.3",
     "js-yaml": "^4.1.0",
     "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"
