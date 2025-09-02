@@ -1,3 +1,5 @@
+import { describe, beforeAll, afterAll, vi, MockInstance, it, expect} from "vitest";
+
 import * as gcp from "../src/gcp";
 import io = require("@actions/io");
 import fs = require("fs");
@@ -7,10 +9,10 @@ const workspaceDir = path.join(__dirname, "runner", "workspace");
 process.env.GITHUB_WORKSPACE = workspaceDir;
 
 describe("GCP Service Account setup", () => {
-  let stdoutSpy: jest.SpyInstance;
+  let stdoutSpy: MockInstance;
   beforeAll(async () => {
     await io.mkdirP(workspaceDir);
-    stdoutSpy = jest.spyOn(global.process.stdout, "write").mockImplementation();
+    stdoutSpy = vi.spyOn(global.process.stdout, "write").mockImplementation(() => true);
   });
 
   afterAll(async () => {

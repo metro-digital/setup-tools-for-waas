@@ -1,3 +1,5 @@
+import { describe, beforeAll, afterAll, vi, MockInstance, it, expect} from "vitest";
+
 import * as install from "../src/install";
 import io = require("@actions/io");
 import fs = require("fs");
@@ -11,11 +13,11 @@ process.env.RUNNER_TOOL_CACHE = toolBaseDir;
 process.env.RUNNER_TEMP = tempDir;
 
 describe("installer tests", () => {
-  let stdoutSpy: jest.SpyInstance;
+  let stdoutSpy: MockInstance;
   beforeAll(async () => {
     await io.rmRF(toolBaseDir);
     await io.rmRF(tempDir);
-    stdoutSpy = jest.spyOn(global.process.stdout, "write").mockImplementation();
+    stdoutSpy = vi.spyOn(global.process.stdout, "write").mockImplementation(() => true);
   });
 
   afterAll(async () => {
@@ -24,7 +26,7 @@ describe("installer tests", () => {
     stdoutSpy.mockRestore();
   });
 
-  it("Acquires kubectl version 1.27.10", async () => {
+  it("Acquires kubectl version 1.27.10", { timeout: 180e3 }, async () => {
     const tool = {
       name: "kubectl",
       version: "1.27.10",
@@ -36,7 +38,7 @@ describe("installer tests", () => {
     expectRightVersion(tool, "./kubectl version");
   });
 
-  it("Acquires sops version 3.6.1", async () => {
+  it("Acquires sops version 3.6.1", { timeout: 180e3 }, async () => {
     const tool = {
       name: "sops",
       version: "3.6.1",
@@ -48,7 +50,7 @@ describe("installer tests", () => {
     expectRightVersion(tool, "./sops --version");
   });
 
-  it("Acquires yq version 3.4.1", async () => {
+  it("Acquires yq version 3.4.1", { timeout: 180e3 }, async () => {
     const tool = {
       name: "yq",
       version: "3.4.1",
@@ -60,7 +62,7 @@ describe("installer tests", () => {
     expectRightVersion(tool, "./yq --version");
   });
 
-  it("Acquires kustomize version 3.5.4", async () => {
+  it("Acquires kustomize version 3.5.4", { timeout: 180e3 }, async () => {
     const tool = {
       name: "kustomize",
       version: "3.5.4",
@@ -72,7 +74,7 @@ describe("installer tests", () => {
     expectRightVersion(tool, "./kustomize version");
   });
 
-  it("Acquires skaffold version 1.20.0", async () => {
+  it("Acquires skaffold version 1.20.0", { timeout: 180e3 }, async () => {
     const tool = {
       name: "skaffold",
       version: "1.20.0",

@@ -1,3 +1,4 @@
+import { test, expect} from "vitest";
 import { validateVersion } from "../src/validateVersion";
 
 test("For version waas/latest", () => {
