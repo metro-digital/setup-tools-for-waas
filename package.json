@@ -1,6 +1,6 @@
 {
   "name": "setup-tools-for-waas",
-  "version": "0.23.0",
+  "version": "0.23.1",
   "private": true,
   "description": "Github action to setup tools used by the WaaS workflow",
   "main": "dist/index.js",
