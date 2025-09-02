@@ -1,6 +1,6 @@
 import * as path from "node:path";
 import * as fs from "node:fs";
-import * as yaml from "js-yaml";
+import * as yaml from "yaml";
 import * as core from "@actions/core";
 import * as install from "./install";
 import * as gcp from "./gcp";
@@ -22,7 +22,7 @@ export async function run(): Promise<void> {
 
   const configFilepath = path.join(__dirname, `${version.replace("/", ".")}.yaml`);
   core.debug(`Reading config from ${configFilepath}`);
-  const tools = yaml.load(fs.readFileSync(configFilepath, "utf8")) as install.Tools;
+  const tools = yaml.parse(fs.readFileSync(configFilepath, "utf8")) as install.Tools;
   for (const tool of tools) {
     const cachedPath = await install.downloadTool(tool);
     core.debug(`Cached path ${cachedPath}`);
