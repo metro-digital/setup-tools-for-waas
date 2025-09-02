@@ -1,4 +1,4 @@
-import { describe, beforeAll, afterAll, vi, MockInstance, it, expect} from "vitest";
+import { describe, beforeAll, afterAll, vi, MockInstance, it, expect } from "vitest";
 
 import * as gcp from "../src/gcp";
 import io = require("@actions/io");

@@ -1,4 +1,4 @@
-import { describe, beforeAll, afterAll, vi, MockInstance, it, expect} from "vitest";
+import { describe, beforeAll, afterAll, vi, MockInstance, it, expect } from "vitest";
 
 import * as install from "../src/install";
 import io = require("@actions/io");
