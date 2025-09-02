@@ -4023,8 +4023,8 @@ var require_util2 = __commonJS({
     function createDeferredPromise() {
       let res;
       let rej;
-      const promise = new Promise((resolve2, reject) => {
-        res = resolve2;
+      const promise = new Promise((resolve, reject) => {
+        res = resolve;
         rej = reject;
       });
       return { promise, resolve: res, reject: rej };
@@ -5528,8 +5528,8 @@ Content-Type: ${value.type || "application/octet-stream"}\r
                 });
               }
             });
-            const busboyResolve = new Promise((resolve2, reject) => {
-              busboy.on("finish", resolve2);
+            const busboyResolve = new Promise((resolve, reject) => {
+              busboy.on("finish", resolve);
               busboy.on("error", (err) => reject(new TypeError(err)));
             });
             if (this.body !== null) for await (const chunk of consumeBody(this[kState].body)) busboy.write(chunk);
@@ -6063,9 +6063,9 @@ var require_dispatcher_base = __commonJS({
       }
       close(callback) {
         if (callback === void 0) {
-          return new Promise((resolve2, reject) => {
+          return new Promise((resolve, reject) => {
             this.close((err, data) => {
-              return err ? reject(err) : resolve2(data);
+              return err ? reject(err) : resolve(data);
             });
           });
         }
@@ -6103,12 +6103,12 @@ var require_dispatcher_base = __commonJS({
           err = null;
         }
         if (callback === void 0) {
-          return new Promise((resolve2, reject) => {
+          return new Promise((resolve, reject) => {
             this.destroy(err, (err2, data) => {
               return err2 ? (
                 /* istanbul ignore next: should never error */
                 reject(err2)
-              ) : resolve2(data);
+              ) : resolve(data);
             });
           });
         }
@@ -7168,16 +7168,16 @@ var require_client = __commonJS({
         return this[kNeedDrain] < 2;
       }
       async [kClose]() {
-        return new Promise((resolve2) => {
+        return new Promise((resolve) => {
           if (!this[kSize]) {
-            resolve2(null);
+            resolve(null);
           } else {
-            this[kClosedResolve] = resolve2;
+            this[kClosedResolve] = resolve;
           }
         });
       }
       async [kDestroy](err) {
-        return new Promise((resolve2) => {
+        return new Promise((resolve) => {
           const requests = this[kQueue].splice(this[kPendingIdx]);
           for (let i = 0; i < requests.length; i++) {
             const request = requests[i];
@@ -7188,7 +7188,7 @@ var require_client = __commonJS({
               this[kClosedResolve]();
               this[kClosedResolve] = null;
             }
-            resolve2();
+            resolve();
           };
           if (this[kHTTP2Session] != null) {
             util.destroy(this[kHTTP2Session], err);
@@ -7768,7 +7768,7 @@ var require_client = __commonJS({
         });
       }
       try {
-        const socket = await new Promise((resolve2, reject) => {
+        const socket = await new Promise((resolve, reject) => {
           client[kConnector]({
             host,
             hostname,
@@ -7780,7 +7780,7 @@ var require_client = __commonJS({
             if (err) {
               reject(err);
             } else {
-              resolve2(socket2);
+              resolve(socket2);
             }
           });
         });
@@ -8404,12 +8404,12 @@ upgrade: ${upgrade}\r
           cb();
         }
       }
-      const waitForDrain = () => new Promise((resolve2, reject) => {
+      const waitForDrain = () => new Promise((resolve, reject) => {
         assert(callback === null);
         if (socket[kError]) {
           reject(socket[kError]);
         } else {
-          callback = resolve2;
+          callback = resolve;
         }
       });
       if (client[kHTTPConnVersion] === "h2") {
@@ -8754,8 +8754,8 @@ var require_pool_base = __commonJS({
         if (this[kQueue].isEmpty()) {
           return Promise.all(this[kClients].map((c) => c.close()));
         } else {
-          return new Promise((resolve2) => {
-            this[kClosedResolve] = resolve2;
+          return new Promise((resolve) => {
+            this[kClosedResolve] = resolve;
           });
         }
       }
@@ -9333,7 +9333,7 @@ var require_readable = __commonJS({
         if (this.closed) {
           return Promise.resolve(null);
         }
-        return new Promise((resolve2, reject) => {
+        return new Promise((resolve, reject) => {
           const signalListenerCleanup = signal ? util.addAbortListener(signal, () => {
             this.destroy();
           }) : noop;
@@ -9342,7 +9342,7 @@ var require_readable = __commonJS({
             if (signal && signal.aborted) {
               reject(signal.reason || Object.assign(new Error("The operation was aborted"), { name: "AbortError" }));
             } else {
-              resolve2(null);
+              resolve(null);
             }
           }).on("error", noop).on("data", function(chunk) {
             limit -= chunk.length;
@@ -9364,11 +9364,11 @@ var require_readable = __commonJS({
         throw new TypeError("unusable");
       }
       assert(!stream[kConsume]);
-      return new Promise((resolve2, reject) => {
+      return new Promise((resolve, reject) => {
         stream[kConsume] = {
           type: type2,
           stream,
-          resolve: resolve2,
+          resolve,
           reject,
           length: 0,
           body: []
@@ -9403,12 +9403,12 @@ var require_readable = __commonJS({
       }
     }
     function consumeEnd(consume2) {
-      const { type: type2, body, resolve: resolve2, stream, length } = consume2;
+      const { type: type2, body, resolve, stream, length } = consume2;
       try {
         if (type2 === "text") {
-          resolve2(toUSVString(Buffer.concat(body)));
+          resolve(toUSVString(Buffer.concat(body)));
         } else if (type2 === "json") {
-          resolve2(JSON.parse(Buffer.concat(body)));
+          resolve(JSON.parse(Buffer.concat(body)));
         } else if (type2 === "arrayBuffer") {
           const dst = new Uint8Array(length);
           let pos = 0;
@@ -9416,12 +9416,12 @@ var require_readable = __commonJS({
             dst.set(buf, pos);
             pos += buf.byteLength;
           }
-          resolve2(dst.buffer);
+          resolve(dst.buffer);
         } else if (type2 === "blob") {
           if (!Blob2) {
             Blob2 = require("buffer").Blob;
           }
-          resolve2(new Blob2(body, { type: stream[kContentType] }));
+          resolve(new Blob2(body, { type: stream[kContentType] }));
         }
         consumeFinish(consume2);
       } catch (err) {
@@ -9676,9 +9676,9 @@ var require_api_request = __commonJS({
     };
     function request(opts, callback) {
       if (callback === void 0) {
-        return new Promise((resolve2, reject) => {
+        return new Promise((resolve, reject) => {
           request.call(this, opts, (err, data) => {
-            return err ? reject(err) : resolve2(data);
+            return err ? reject(err) : resolve(data);
           });
         });
       }
@@ -9851,9 +9851,9 @@ var require_api_stream = __commonJS({
     };
     function stream(opts, factory, callback) {
       if (callback === void 0) {
-        return new Promise((resolve2, reject) => {
+        return new Promise((resolve, reject) => {
           stream.call(this, opts, factory, (err, data) => {
-            return err ? reject(err) : resolve2(data);
+            return err ? reject(err) : resolve(data);
           });
         });
       }
@@ -10134,9 +10134,9 @@ var require_api_upgrade = __commonJS({
     };
     function upgrade(opts, callback) {
       if (callback === void 0) {
-        return new Promise((resolve2, reject) => {
+        return new Promise((resolve, reject) => {
           upgrade.call(this, opts, (err, data) => {
-            return err ? reject(err) : resolve2(data);
+            return err ? reject(err) : resolve(data);
           });
         });
       }
@@ -10225,9 +10225,9 @@ var require_api_connect = __commonJS({
     };
     function connect(opts, callback) {
       if (callback === void 0) {
-        return new Promise((resolve2, reject) => {
+        return new Promise((resolve, reject) => {
           connect.call(this, opts, (err, data) => {
-            return err ? reject(err) : resolve2(data);
+            return err ? reject(err) : resolve(data);
           });
         });
       }
@@ -13849,7 +13849,7 @@ var require_fetch = __commonJS({
       async function dispatch({ body }) {
         const url = requestCurrentURL(request);
         const agent = fetchParams.controller.dispatcher;
-        return new Promise((resolve2, reject) => agent.dispatch(
+        return new Promise((resolve, reject) => agent.dispatch(
           {
             path: url.pathname + url.search,
             origin: url.origin,
@@ -13925,7 +13925,7 @@ var require_fetch = __commonJS({
                   }
                 }
               }
-              resolve2({
+              resolve({
                 status,
                 statusText,
                 headersList: headers[kHeadersList],
@@ -13968,7 +13968,7 @@ var require_fetch = __commonJS({
                 const val = headersList[n + 1].toString("latin1");
                 headers[kHeadersList].append(key, val);
               }
-              resolve2({
+              resolve({
                 status,
                 statusText: STATUS_CODES[status],
                 headersList: headers[kHeadersList],
@@ -17322,11 +17322,11 @@ var require_lib = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -17342,7 +17342,7 @@ var require_lib = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -17428,26 +17428,26 @@ var require_lib = __commonJS({
       }
       readBody() {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve2) => __awaiter(this, void 0, void 0, function* () {
+          return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             let output = Buffer.alloc(0);
             this.message.on("data", (chunk) => {
               output = Buffer.concat([output, chunk]);
             });
             this.message.on("end", () => {
-              resolve2(output.toString());
+              resolve(output.toString());
             });
           }));
         });
       }
       readBodyBuffer() {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve2) => __awaiter(this, void 0, void 0, function* () {
+          return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
             const chunks = [];
             this.message.on("data", (chunk) => {
               chunks.push(chunk);
             });
             this.message.on("end", () => {
-              resolve2(Buffer.concat(chunks));
+              resolve(Buffer.concat(chunks));
             });
           }));
         });
@@ -17656,14 +17656,14 @@ var require_lib = __commonJS({
        */
       requestRaw(info2, data) {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve2, reject) => {
+          return new Promise((resolve, reject) => {
             function callbackForResult(err, res) {
               if (err) {
                 reject(err);
               } else if (!res) {
                 reject(new Error("Unknown error"));
               } else {
-                resolve2(res);
+                resolve(res);
               }
             }
             this.requestRawWithCallback(info2, data, callbackForResult);
@@ -17845,12 +17845,12 @@ var require_lib = __commonJS({
         return __awaiter(this, void 0, void 0, function* () {
           retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
           const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
-          return new Promise((resolve2) => setTimeout(() => resolve2(), ms));
+          return new Promise((resolve) => setTimeout(() => resolve(), ms));
         });
       }
       _processResponse(res, options) {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve2, reject) => __awaiter(this, void 0, void 0, function* () {
+          return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             const statusCode = res.message.statusCode || 0;
             const response = {
               statusCode,
@@ -17858,7 +17858,7 @@ var require_lib = __commonJS({
               headers: {}
             };
             if (statusCode === HttpCodes.NotFound) {
-              resolve2(response);
+              resolve(response);
             }
             function dateTimeDeserializer(key, value) {
               if (typeof value === "string") {
@@ -17897,7 +17897,7 @@ var require_lib = __commonJS({
               err.result = response.result;
               reject(err);
             } else {
-              resolve2(response);
+              resolve(response);
             }
           }));
         });
@@ -17914,11 +17914,11 @@ var require_auth = __commonJS({
     "use strict";
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -17934,7 +17934,7 @@ var require_auth = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -18018,11 +18018,11 @@ var require_oidc_utils = __commonJS({
     "use strict";
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -18038,7 +18038,7 @@ var require_oidc_utils = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -18116,11 +18116,11 @@ var require_summary = __commonJS({
     "use strict";
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -18136,7 +18136,7 @@ var require_summary = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -18482,11 +18482,11 @@ var require_io_util = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -18502,7 +18502,7 @@ var require_io_util = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -18655,11 +18655,11 @@ var require_io = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -18675,7 +18675,7 @@ var require_io = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -18903,11 +18903,11 @@ var require_toolrunner = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -18923,7 +18923,7 @@ var require_toolrunner = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -19151,7 +19151,7 @@ var require_toolrunner = __commonJS({
             this.toolPath = path4.resolve(process.cwd(), this.options.cwd || process.cwd(), this.toolPath);
           }
           this.toolPath = yield io.which(this.toolPath, true);
-          return new Promise((resolve2, reject) => __awaiter(this, void 0, void 0, function* () {
+          return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
             this._debug(`exec tool: ${this.toolPath}`);
             this._debug("arguments:");
             for (const arg of this.args) {
@@ -19234,7 +19234,7 @@ var require_toolrunner = __commonJS({
               if (error) {
                 reject(error);
               } else {
-                resolve2(exitCode);
+                resolve(exitCode);
               }
             });
             if (this.options.input) {
@@ -19387,11 +19387,11 @@ var require_exec = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -19407,7 +19407,7 @@ var require_exec = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -19498,11 +19498,11 @@ var require_platform = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -19518,7 +19518,7 @@ var require_platform = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -19531,7 +19531,7 @@ var require_platform = __commonJS({
     var os_1 = __importDefault(require("os"));
     var exec = __importStar(require_exec());
     var getWindowsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
-      const { stdout: version2 } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', void 0, {
+      const { stdout: version } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', void 0, {
         silent: true
       });
       const { stdout: name } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Caption"', void 0, {
@@ -19539,7 +19539,7 @@ var require_platform = __commonJS({
       });
       return {
         name: name.trim(),
-        version: version2.trim()
+        version: version.trim()
       };
     });
     var getMacOsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -19547,21 +19547,21 @@ var require_platform = __commonJS({
       const { stdout } = yield exec.getExecOutput("sw_vers", void 0, {
         silent: true
       });
-      const version2 = (_b = (_a = stdout.match(/ProductVersion:\s*(.+)/)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : "";
+      const version = (_b = (_a = stdout.match(/ProductVersion:\s*(.+)/)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : "";
       const name = (_d = (_c = stdout.match(/ProductName:\s*(.+)/)) === null || _c === void 0 ? void 0 : _c[1]) !== null && _d !== void 0 ? _d : "";
       return {
         name,
-        version: version2
+        version
       };
     });
     var getLinuxInfo = () => __awaiter(void 0, void 0, void 0, function* () {
       const { stdout } = yield exec.getExecOutput("lsb_release", ["-i", "-r", "-s"], {
         silent: true
       });
-      const [name, version2] = stdout.trim().split("\n");
+      const [name, version] = stdout.trim().split("\n");
       return {
         name,
-        version: version2
+        version
       };
     });
     exports2.platform = os_1.default.platform();
@@ -19617,11 +19617,11 @@ var require_core = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -19637,7 +19637,7 @@ var require_core = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -19950,74 +19950,74 @@ var require_semver = __commonJS({
       }
     }
     var i;
-    exports2.parse = parse2;
-    function parse2(version2, options) {
+    exports2.parse = parse;
+    function parse(version, options) {
       if (!options || typeof options !== "object") {
         options = {
           loose: !!options,
           includePrerelease: false
         };
       }
-      if (version2 instanceof SemVer) {
-        return version2;
+      if (version instanceof SemVer) {
+        return version;
       }
-      if (typeof version2 !== "string") {
+      if (typeof version !== "string") {
         return null;
       }
-      if (version2.length > MAX_LENGTH) {
+      if (version.length > MAX_LENGTH) {
         return null;
       }
       var r = options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL];
-      if (!r.test(version2)) {
+      if (!r.test(version)) {
         return null;
       }
       try {
-        return new SemVer(version2, options);
+        return new SemVer(version, options);
       } catch (er) {
         return null;
       }
     }
     exports2.valid = valid;
-    function valid(version2, options) {
-      var v = parse2(version2, options);
+    function valid(version, options) {
+      var v = parse(version, options);
       return v ? v.version : null;
     }
     exports2.clean = clean;
-    function clean(version2, options) {
-      var s = parse2(version2.trim().replace(/^[=v]+/, ""), options);
+    function clean(version, options) {
+      var s = parse(version.trim().replace(/^[=v]+/, ""), options);
       return s ? s.version : null;
     }
     exports2.SemVer = SemVer;
-    function SemVer(version2, options) {
+    function SemVer(version, options) {
       if (!options || typeof options !== "object") {
         options = {
           loose: !!options,
           includePrerelease: false
         };
       }
-      if (version2 instanceof SemVer) {
-        if (version2.loose === options.loose) {
-          return version2;
+      if (version instanceof SemVer) {
+        if (version.loose === options.loose) {
+          return version;
         } else {
-          version2 = version2.version;
+          version = version.version;
         }
-      } else if (typeof version2 !== "string") {
-        throw new TypeError("Invalid Version: " + version2);
+      } else if (typeof version !== "string") {
+        throw new TypeError("Invalid Version: " + version);
       }
-      if (version2.length > MAX_LENGTH) {
+      if (version.length > MAX_LENGTH) {
         throw new TypeError("version is longer than " + MAX_LENGTH + " characters");
       }
       if (!(this instanceof SemVer)) {
-        return new SemVer(version2, options);
+        return new SemVer(version, options);
       }
-      debug2("SemVer", version2, options);
+      debug2("SemVer", version, options);
       this.options = options;
       this.loose = !!options.loose;
-      var m = version2.trim().match(options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL]);
+      var m = version.trim().match(options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL]);
       if (!m) {
-        throw new TypeError("Invalid Version: " + version2);
+        throw new TypeError("Invalid Version: " + version);
       }
-      this.raw = version2;
+      this.raw = version;
       this.major = +m[1];
       this.minor = +m[2];
       this.patch = +m[3];
@@ -20204,13 +20204,13 @@ var require_semver = __commonJS({
       return this;
     };
     exports2.inc = inc;
-    function inc(version2, release, loose, identifier) {
+    function inc(version, release, loose, identifier) {
       if (typeof loose === "string") {
         identifier = loose;
         loose = void 0;
       }
       try {
-        return new SemVer(version2, loose).inc(release, identifier).version;
+        return new SemVer(version, loose).inc(release, identifier).version;
       } catch (er) {
         return null;
       }
@@ -20220,8 +20220,8 @@ var require_semver = __commonJS({
       if (eq(version1, version2)) {
         return null;
       } else {
-        var v1 = parse2(version1);
-        var v2 = parse2(version2);
+        var v1 = parse(version1);
+        var v2 = parse(version2);
         var prefix = "";
         if (v1.prerelease.length || v2.prerelease.length) {
           prefix = "pre";
@@ -20401,19 +20401,19 @@ var require_semver = __commonJS({
     Comparator.prototype.toString = function() {
       return this.value;
     };
-    Comparator.prototype.test = function(version2) {
-      debug2("Comparator.test", version2, this.options.loose);
-      if (this.semver === ANY || version2 === ANY) {
+    Comparator.prototype.test = function(version) {
+      debug2("Comparator.test", version, this.options.loose);
+      if (this.semver === ANY || version === ANY) {
         return true;
       }
-      if (typeof version2 === "string") {
+      if (typeof version === "string") {
         try {
-          version2 = new SemVer(version2, this.options);
+          version = new SemVer(version, this.options);
         } catch (er) {
           return false;
         }
       }
-      return cmp(version2, this.operator, this.semver, this.options);
+      return cmp(version, this.operator, this.semver, this.options);
     };
     Comparator.prototype.intersects = function(comp, options) {
       if (!(comp instanceof Comparator)) {
@@ -20723,31 +20723,31 @@ var require_semver = __commonJS({
       }
       return (from + " " + to).trim();
     }
-    Range.prototype.test = function(version2) {
-      if (!version2) {
+    Range.prototype.test = function(version) {
+      if (!version) {
         return false;
       }
-      if (typeof version2 === "string") {
+      if (typeof version === "string") {
         try {
-          version2 = new SemVer(version2, this.options);
+          version = new SemVer(version, this.options);
         } catch (er) {
           return false;
         }
       }
       for (var i2 = 0; i2 < this.set.length; i2++) {
-        if (testSet(this.set[i2], version2, this.options)) {
+        if (testSet(this.set[i2], version, this.options)) {
           return true;
         }
       }
       return false;
     };
-    function testSet(set2, version2, options) {
+    function testSet(set2, version, options) {
       for (var i2 = 0; i2 < set2.length; i2++) {
-        if (!set2[i2].test(version2)) {
+        if (!set2[i2].test(version)) {
           return false;
         }
       }
-      if (version2.prerelease.length && !options.includePrerelease) {
+      if (version.prerelease.length && !options.includePrerelease) {
         for (i2 = 0; i2 < set2.length; i2++) {
           debug2(set2[i2].semver);
           if (set2[i2].semver === ANY) {
@@ -20755,7 +20755,7 @@ var require_semver = __commonJS({
           }
           if (set2[i2].semver.prerelease.length > 0) {
             var allowed = set2[i2].semver;
-            if (allowed.major === version2.major && allowed.minor === version2.minor && allowed.patch === version2.patch) {
+            if (allowed.major === version.major && allowed.minor === version.minor && allowed.patch === version.patch) {
               return true;
             }
           }
@@ -20765,13 +20765,13 @@ var require_semver = __commonJS({
       return true;
     }
     exports2.satisfies = satisfies;
-    function satisfies(version2, range, options) {
+    function satisfies(version, range, options) {
       try {
         range = new Range(range, options);
       } catch (er) {
         return false;
       }
-      return range.test(version2);
+      return range.test(version);
     }
     exports2.maxSatisfying = maxSatisfying;
     function maxSatisfying(versions, range, options) {
@@ -20865,16 +20865,16 @@ var require_semver = __commonJS({
       }
     }
     exports2.ltr = ltr;
-    function ltr(version2, range, options) {
-      return outside(version2, range, "<", options);
+    function ltr(version, range, options) {
+      return outside(version, range, "<", options);
     }
     exports2.gtr = gtr;
-    function gtr(version2, range, options) {
-      return outside(version2, range, ">", options);
+    function gtr(version, range, options) {
+      return outside(version, range, ">", options);
     }
     exports2.outside = outside;
-    function outside(version2, range, hilo, options) {
-      version2 = new SemVer(version2, options);
+    function outside(version, range, hilo, options) {
+      version = new SemVer(version, options);
       range = new Range(range, options);
       var gtfn, ltefn, ltfn, comp, ecomp;
       switch (hilo) {
@@ -20895,7 +20895,7 @@ var require_semver = __commonJS({
         default:
           throw new TypeError('Must provide a hilo val of "<" or ">"');
       }
-      if (satisfies(version2, range, options)) {
+      if (satisfies(version, range, options)) {
         return false;
       }
       for (var i2 = 0; i2 < range.set.length; ++i2) {
@@ -20917,17 +20917,17 @@ var require_semver = __commonJS({
         if (high.operator === comp || high.operator === ecomp) {
           return false;
         }
-        if ((!low.operator || low.operator === comp) && ltefn(version2, low.semver)) {
+        if ((!low.operator || low.operator === comp) && ltefn(version, low.semver)) {
           return false;
-        } else if (low.operator === ecomp && ltfn(version2, low.semver)) {
+        } else if (low.operator === ecomp && ltfn(version, low.semver)) {
           return false;
         }
       }
       return true;
     }
     exports2.prerelease = prerelease;
-    function prerelease(version2, options) {
-      var parsed = parse2(version2, options);
+    function prerelease(version, options) {
+      var parsed = parse(version, options);
       return parsed && parsed.prerelease.length ? parsed.prerelease : null;
     }
     exports2.intersects = intersects;
@@ -20937,23 +20937,23 @@ var require_semver = __commonJS({
       return r1.intersects(r2);
     }
     exports2.coerce = coerce;
-    function coerce(version2, options) {
-      if (version2 instanceof SemVer) {
-        return version2;
+    function coerce(version, options) {
+      if (version instanceof SemVer) {
+        return version;
       }
-      if (typeof version2 === "number") {
-        version2 = String(version2);
+      if (typeof version === "number") {
+        version = String(version);
       }
-      if (typeof version2 !== "string") {
+      if (typeof version !== "string") {
         return null;
       }
       options = options || {};
       var match = null;
       if (!options.rtl) {
-        match = version2.match(safeRe[t.COERCE]);
+        match = version.match(safeRe[t.COERCE]);
       } else {
         var next;
-        while ((next = safeRe[t.COERCERTL].exec(version2)) && (!match || match.index + match[0].length !== version2.length)) {
+        while ((next = safeRe[t.COERCERTL].exec(version)) && (!match || match.index + match[0].length !== version.length)) {
           if (!match || next.index + next[0].length !== match.index + match[0].length) {
             match = next;
           }
@@ -20964,7 +20964,7 @@ var require_semver = __commonJS({
       if (match === null) {
         return null;
       }
-      return parse2(match[2] + "." + (match[3] || "0") + "." + (match[4] || "0"), options);
+      return parse(match[2] + "." + (match[3] || "0") + "." + (match[4] || "0"), options);
     }
   }
 });
@@ -21002,11 +21002,11 @@ var require_manifest = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -21022,7 +21022,7 @@ var require_manifest = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -21041,9 +21041,9 @@ var require_manifest = __commonJS({
         let match;
         let file;
         for (const candidate of candidates) {
-          const version2 = candidate.version;
-          (0, core_1.debug)(`check ${version2} satisfies ${versionSpec}`);
-          if (semver.satisfies(version2, versionSpec) && (!stable || candidate.stable === stable)) {
+          const version = candidate.version;
+          (0, core_1.debug)(`check ${version} satisfies ${versionSpec}`);
+          if (semver.satisfies(version, versionSpec) && (!stable || candidate.stable === stable)) {
             file = candidate.files.find((item) => {
               (0, core_1.debug)(`${item.arch}===${archFilter} && ${item.platform}===${platFilter}`);
               let chk = item.arch === archFilter && item.platform === platFilter;
@@ -21074,9 +21074,9 @@ var require_manifest = __commonJS({
     exports2._findMatch = _findMatch;
     function _getOsVersion() {
       const plat = os.platform();
-      let version2 = "";
+      let version = "";
       if (plat === "darwin") {
-        version2 = cp.execSync("sw_vers -productVersion").toString();
+        version = cp.execSync("sw_vers -productVersion").toString();
       } else if (plat === "linux") {
         const lsbContents = module2.exports._readLinuxVersionFile();
         if (lsbContents) {
@@ -21084,13 +21084,13 @@ var require_manifest = __commonJS({
           for (const line of lines) {
             const parts = line.split("=");
             if (parts.length === 2 && (parts[0].trim() === "VERSION_ID" || parts[0].trim() === "DISTRIB_RELEASE")) {
-              version2 = parts[1].trim().replace(/^"/, "").replace(/"$/, "");
+              version = parts[1].trim().replace(/^"/, "").replace(/"$/, "");
               break;
             }
           }
         }
       }
-      return version2;
+      return version;
     }
     exports2._getOsVersion = _getOsVersion;
     function _readLinuxVersionFile() {
@@ -21141,11 +21141,11 @@ var require_retry_helper = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -21161,7 +21161,7 @@ var require_retry_helper = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -21206,7 +21206,7 @@ var require_retry_helper = __commonJS({
       }
       sleep(seconds) {
         return __awaiter(this, void 0, void 0, function* () {
-          return new Promise((resolve2) => setTimeout(resolve2, seconds * 1e3));
+          return new Promise((resolve) => setTimeout(resolve, seconds * 1e3));
         });
       }
     };
@@ -21247,11 +21247,11 @@ var require_tool_cache = __commonJS({
     };
     var __awaiter = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
       function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve2) {
-          resolve2(value);
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
         });
       }
-      return new (P || (P = Promise))(function(resolve2, reject) {
+      return new (P || (P = Promise))(function(resolve, reject) {
         function fulfilled(value) {
           try {
             step(generator.next(value));
@@ -21267,7 +21267,7 @@ var require_tool_cache = __commonJS({
           }
         }
         function step(result) {
-          result.done ? resolve2(result.value) : adopt(result.value).then(fulfilled, rejected);
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
         }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
@@ -21554,39 +21554,39 @@ var require_tool_cache = __commonJS({
         yield (0, exec_1.exec)(`"${unzipPath}"`, args, { cwd: dest });
       });
     }
-    function cacheDir(sourceDir, tool, version2, arch) {
+    function cacheDir(sourceDir, tool, version, arch) {
       return __awaiter(this, void 0, void 0, function* () {
-        version2 = semver.clean(version2) || version2;
+        version = semver.clean(version) || version;
         arch = arch || os.arch();
-        core4.debug(`Caching tool ${tool} ${version2} ${arch}`);
+        core4.debug(`Caching tool ${tool} ${version} ${arch}`);
         core4.debug(`source dir: ${sourceDir}`);
         if (!fs4.statSync(sourceDir).isDirectory()) {
           throw new Error("sourceDir is not a directory");
         }
-        const destPath = yield _createToolPath(tool, version2, arch);
+        const destPath = yield _createToolPath(tool, version, arch);
         for (const itemName of fs4.readdirSync(sourceDir)) {
           const s = path4.join(sourceDir, itemName);
           yield io.cp(s, destPath, { recursive: true });
         }
-        _completeToolPath(tool, version2, arch);
+        _completeToolPath(tool, version, arch);
         return destPath;
       });
     }
     exports2.cacheDir = cacheDir;
-    function cacheFile2(sourceFile, targetFile, tool, version2, arch) {
+    function cacheFile2(sourceFile, targetFile, tool, version, arch) {
       return __awaiter(this, void 0, void 0, function* () {
-        version2 = semver.clean(version2) || version2;
+        version = semver.clean(version) || version;
         arch = arch || os.arch();
-        core4.debug(`Caching tool ${tool} ${version2} ${arch}`);
+        core4.debug(`Caching tool ${tool} ${version} ${arch}`);
         core4.debug(`source file: ${sourceFile}`);
         if (!fs4.statSync(sourceFile).isFile()) {
           throw new Error("sourceFile is not a file");
         }
-        const destFolder = yield _createToolPath(tool, version2, arch);
+        const destFolder = yield _createToolPath(tool, version, arch);
         const destPath = path4.join(destFolder, targetFile);
         core4.debug(`destination file ${destPath}`);
         yield io.cp(sourceFile, destPath);
-        _completeToolPath(tool, version2, arch);
+        _completeToolPath(tool, version, arch);
         return destFolder;
       });
     }
@@ -21688,9 +21688,9 @@ var require_tool_cache = __commonJS({
         return dest;
       });
     }
-    function _createToolPath(tool, version2, arch) {
+    function _createToolPath(tool, version, arch) {
       return __awaiter(this, void 0, void 0, function* () {
-        const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version2) || version2, arch || "");
+        const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
         core4.debug(`destination ${folderPath}`);
         const markerPath = `${folderPath}.complete`;
         yield io.rmRF(folderPath);
@@ -21699,8 +21699,8 @@ var require_tool_cache = __commonJS({
         return folderPath;
       });
     }
-    function _completeToolPath(tool, version2, arch) {
-      const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version2) || version2, arch || "");
+    function _completeToolPath(tool, version, arch) {
+      const folderPath = path4.join(_getCacheDirectory(), tool, semver.clean(version) || version, arch || "");
       const markerPath = `${folderPath}.complete`;
       fs4.writeFileSync(markerPath, "");
       core4.debug("finished caching tool");
@@ -21714,7 +21714,7 @@ var require_tool_cache = __commonJS({
     }
     exports2.isExplicitVersion = isExplicitVersion;
     function evaluateVersions(versions, versionSpec) {
-      let version2 = "";
+      let version = "";
       core4.debug(`evaluating ${versions.length} versions`);
       versions = versions.sort((a, b) => {
         if (semver.gt(a, b)) {
@@ -21726,16 +21726,16 @@ var require_tool_cache = __commonJS({
         const potential = versions[i];
         const satisfied = semver.satisfies(potential, versionSpec);
         if (satisfied) {
-          version2 = potential;
+          version = potential;
           break;
         }
       }
-      if (version2) {
-        core4.debug(`matched: ${version2}`);
+      if (version) {
+        core4.debug(`matched: ${version}`);
       } else {
         core4.debug("match not found");
       }
-      return version2;
+      return version;
     }
     exports2.evaluateVersions = evaluateVersions;
     function _getCacheDirectory() {
@@ -24357,231 +24357,6 @@ var core3 = __toESM(require_core());
 var path = __toESM(require("node:path"));
 var fs = __toESM(require("node:fs"));
 var toolCache = __toESM(require_tool_cache());
-
-// node_modules/mkdirp/dist/mjs/mkdirp-manual.js
-var import_path = require("path");
-
-// node_modules/mkdirp/dist/mjs/opts-arg.js
-var import_fs = require("fs");
-var optsArg = (opts) => {
-  if (!opts) {
-    opts = { mode: 511 };
-  } else if (typeof opts === "object") {
-    opts = { mode: 511, ...opts };
-  } else if (typeof opts === "number") {
-    opts = { mode: opts };
-  } else if (typeof opts === "string") {
-    opts = { mode: parseInt(opts, 8) };
-  } else {
-    throw new TypeError("invalid options argument");
-  }
-  const resolved = opts;
-  const optsFs = opts.fs || {};
-  opts.mkdir = opts.mkdir || optsFs.mkdir || import_fs.mkdir;
-  opts.mkdirAsync = opts.mkdirAsync ? opts.mkdirAsync : async (path4, options) => {
-    return new Promise((res, rej) => resolved.mkdir(path4, options, (er, made) => er ? rej(er) : res(made)));
-  };
-  opts.stat = opts.stat || optsFs.stat || import_fs.stat;
-  opts.statAsync = opts.statAsync ? opts.statAsync : async (path4) => new Promise((res, rej) => resolved.stat(path4, (err, stats) => err ? rej(err) : res(stats)));
-  opts.statSync = opts.statSync || optsFs.statSync || import_fs.statSync;
-  opts.mkdirSync = opts.mkdirSync || optsFs.mkdirSync || import_fs.mkdirSync;
-  return resolved;
-};
-
-// node_modules/mkdirp/dist/mjs/mkdirp-manual.js
-var mkdirpManualSync = (path4, options, made) => {
-  const parent = (0, import_path.dirname)(path4);
-  const opts = { ...optsArg(options), recursive: false };
-  if (parent === path4) {
-    try {
-      return opts.mkdirSync(path4, opts);
-    } catch (er) {
-      const fer = er;
-      if (fer && fer.code !== "EISDIR") {
-        throw er;
-      }
-      return;
-    }
-  }
-  try {
-    opts.mkdirSync(path4, opts);
-    return made || path4;
-  } catch (er) {
-    const fer = er;
-    if (fer && fer.code === "ENOENT") {
-      return mkdirpManualSync(path4, opts, mkdirpManualSync(parent, opts, made));
-    }
-    if (fer && fer.code !== "EEXIST" && fer && fer.code !== "EROFS") {
-      throw er;
-    }
-    try {
-      if (!opts.statSync(path4).isDirectory())
-        throw er;
-    } catch (_) {
-      throw er;
-    }
-  }
-};
-var mkdirpManual = Object.assign(async (path4, options, made) => {
-  const opts = optsArg(options);
-  opts.recursive = false;
-  const parent = (0, import_path.dirname)(path4);
-  if (parent === path4) {
-    return opts.mkdirAsync(path4, opts).catch((er) => {
-      const fer = er;
-      if (fer && fer.code !== "EISDIR") {
-        throw er;
-      }
-    });
-  }
-  return opts.mkdirAsync(path4, opts).then(() => made || path4, async (er) => {
-    const fer = er;
-    if (fer && fer.code === "ENOENT") {
-      return mkdirpManual(parent, opts).then((made2) => mkdirpManual(path4, opts, made2));
-    }
-    if (fer && fer.code !== "EEXIST" && fer.code !== "EROFS") {
-      throw er;
-    }
-    return opts.statAsync(path4).then((st) => {
-      if (st.isDirectory()) {
-        return made;
-      } else {
-        throw er;
-      }
-    }, () => {
-      throw er;
-    });
-  });
-}, { sync: mkdirpManualSync });
-
-// node_modules/mkdirp/dist/mjs/mkdirp-native.js
-var import_path3 = require("path");
-
-// node_modules/mkdirp/dist/mjs/find-made.js
-var import_path2 = require("path");
-var findMade = async (opts, parent, path4) => {
-  if (path4 === parent) {
-    return;
-  }
-  return opts.statAsync(parent).then(
-    (st) => st.isDirectory() ? path4 : void 0,
-    // will fail later
-    // will fail later
-    (er) => {
-      const fer = er;
-      return fer && fer.code === "ENOENT" ? findMade(opts, (0, import_path2.dirname)(parent), parent) : void 0;
-    }
-  );
-};
-var findMadeSync = (opts, parent, path4) => {
-  if (path4 === parent) {
-    return void 0;
-  }
-  try {
-    return opts.statSync(parent).isDirectory() ? path4 : void 0;
-  } catch (er) {
-    const fer = er;
-    return fer && fer.code === "ENOENT" ? findMadeSync(opts, (0, import_path2.dirname)(parent), parent) : void 0;
-  }
-};
-
-// node_modules/mkdirp/dist/mjs/mkdirp-native.js
-var mkdirpNativeSync = (path4, options) => {
-  const opts = optsArg(options);
-  opts.recursive = true;
-  const parent = (0, import_path3.dirname)(path4);
-  if (parent === path4) {
-    return opts.mkdirSync(path4, opts);
-  }
-  const made = findMadeSync(opts, path4);
-  try {
-    opts.mkdirSync(path4, opts);
-    return made;
-  } catch (er) {
-    const fer = er;
-    if (fer && fer.code === "ENOENT") {
-      return mkdirpManualSync(path4, opts);
-    } else {
-      throw er;
-    }
-  }
-};
-var mkdirpNative = Object.assign(async (path4, options) => {
-  const opts = { ...optsArg(options), recursive: true };
-  const parent = (0, import_path3.dirname)(path4);
-  if (parent === path4) {
-    return await opts.mkdirAsync(path4, opts);
-  }
-  return findMade(opts, path4).then((made) => opts.mkdirAsync(path4, opts).then((m) => made || m).catch((er) => {
-    const fer = er;
-    if (fer && fer.code === "ENOENT") {
-      return mkdirpManual(path4, opts);
-    } else {
-      throw er;
-    }
-  }));
-}, { sync: mkdirpNativeSync });
-
-// node_modules/mkdirp/dist/mjs/path-arg.js
-var import_path4 = require("path");
-var platform = process.env.__TESTING_MKDIRP_PLATFORM__ || process.platform;
-var pathArg = (path4) => {
-  if (/\0/.test(path4)) {
-    throw Object.assign(new TypeError("path must be a string without null bytes"), {
-      path: path4,
-      code: "ERR_INVALID_ARG_VALUE"
-    });
-  }
-  path4 = (0, import_path4.resolve)(path4);
-  if (platform === "win32") {
-    const badWinChars = /[*|"<>?:]/;
-    const { root } = (0, import_path4.parse)(path4);
-    if (badWinChars.test(path4.substring(root.length))) {
-      throw Object.assign(new Error("Illegal characters in path."), {
-        path: path4,
-        code: "EINVAL"
-      });
-    }
-  }
-  return path4;
-};
-
-// node_modules/mkdirp/dist/mjs/use-native.js
-var import_fs2 = require("fs");
-var version = process.env.__TESTING_MKDIRP_NODE_VERSION__ || process.version;
-var versArr = version.replace(/^v/, "").split(".");
-var hasNative = +versArr[0] > 10 || +versArr[0] === 10 && +versArr[1] >= 12;
-var useNativeSync = !hasNative ? () => false : (opts) => optsArg(opts).mkdirSync === import_fs2.mkdirSync;
-var useNative = Object.assign(!hasNative ? () => false : (opts) => optsArg(opts).mkdir === import_fs2.mkdir, {
-  sync: useNativeSync
-});
-
-// node_modules/mkdirp/dist/mjs/index.js
-var mkdirpSync = (path4, opts) => {
-  path4 = pathArg(path4);
-  const resolved = optsArg(opts);
-  return useNativeSync(resolved) ? mkdirpNativeSync(path4, resolved) : mkdirpManualSync(path4, resolved);
-};
-var mkdirp = Object.assign(async (path4, opts) => {
-  path4 = pathArg(path4);
-  const resolved = optsArg(opts);
-  return useNative(resolved) ? mkdirpNative(path4, resolved) : mkdirpManual(path4, resolved);
-}, {
-  mkdirpSync,
-  mkdirpNative,
-  mkdirpNativeSync,
-  mkdirpManual,
-  mkdirpManualSync,
-  sync: mkdirpSync,
-  native: mkdirpNative,
-  nativeSync: mkdirpNativeSync,
-  manual: mkdirpManual,
-  manualSync: mkdirpManualSync,
-  useNative,
-  useNativeSync
-});
-
-// src/install.ts
 async function downloadTool2(tool) {
   let toolDownloadPath = "";
   let cachedToolpath = toolCache.find(tool.name, tool.version);
@@ -24602,7 +24377,7 @@ async function downloadTool2(tool) {
   if (tool.dest !== void 0 && tool.dest !== "") {
     const baseDir = process.env.XDG_CONFIG_HOME || `${process.env.HOME || ""}/.config`;
     const destDir = tool.dest.replace("${KUSTOMIZE_PLUGINS_DIR}", baseDir);
-    mkdirpSync(destDir);
+    await fs.promises.mkdir(destDir, { recursive: true });
     fs.copyFileSync(toolPath, path.join(destDir, tool.name));
   }
   return toolPath;
@@ -24638,25 +24413,25 @@ function parseServiceAccountKey(serviceAccountKey) {
 
 // src/validateVersion.ts
 var validVersions = ["waas/latest", "waas/v1", "waas/v1alpha3", "waas/v1alpha4", "waas/v1beta1", "waas/v2"];
-function validateVersion(version2) {
-  if (validVersions.includes(version2) === false) {
-    throw new Error(`The version ${version2} is not supported. Please use a supported version, e.g. waas/v2 instead.`);
+function validateVersion(version) {
+  if (validVersions.includes(version) === false) {
+    throw new Error(`The version ${version} is not supported. Please use a supported version, e.g. waas/v2 instead.`);
   }
 }
 
 // src/main.ts
 async function run() {
-  const version2 = core3.getInput("version");
-  if (!version2) {
+  const version = core3.getInput("version");
+  if (!version) {
     core3.setFailed("version cannot be empty");
     return;
   }
-  validateVersion(version2);
+  validateVersion(version);
   const serviceAccountKey = core3.getInput("gcp_sa_key");
   if (serviceAccountKey) {
     await setupServiceAccount(serviceAccountKey);
   }
-  const configFilepath = path3.join(__dirname, `${version2.replace("/", ".")}.yaml`);
+  const configFilepath = path3.join(__dirname, `${version.replace("/", ".")}.yaml`);
   core3.debug(`Reading config from ${configFilepath}`);
   const tools = load(fs3.readFileSync(configFilepath, "utf8"));
   for (const tool of tools) {
