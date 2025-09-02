@@ -1,6 +1,6 @@
 {
   "name": "setup-tools-for-waas",
-  "version": "0.13.0",
+  "version": "0.23.0",
   "private": true,
   "description": "Github action to setup tools used by the WaaS workflow",
   "main": "dist/index.js",
@@ -37,7 +37,7 @@
     "vitest": "^3.2.4"
   },
   "engines": {
-    "node": ">=20.16.0"
+    "node": ">=24.7.0"
   },
   "pre-commit": [
     "lint",
