@@ -1,22 +1,22 @@
 import { describe, beforeAll, afterAll, vi, MockInstance, it, expect } from "vitest";
 
-import * as gcp from "../src/gcp";
-import io = require("@actions/io");
-import fs = require("fs");
-import path = require("path");
+import { setupServiceAccount } from "../src/gcp";
+import { mkdirP, rmRF } from "@actions/io";
+import { existsSync as fsExistsSync } from "node:fs";
+import { join as pathJoin, resolve as pathResolve } from "node:path";
 
-const workspaceDir = path.join(__dirname, "runner", "workspace");
+const workspaceDir = pathJoin(__dirname, "runner", "workspace");
 process.env.GITHUB_WORKSPACE = workspaceDir;
 
 describe("GCP Service Account setup", () => {
   let stdoutSpy: MockInstance;
   beforeAll(async () => {
-    await io.mkdirP(workspaceDir);
+    await mkdirP(workspaceDir);
     stdoutSpy = vi.spyOn(global.process.stdout, "write").mockImplementation(() => true);
   });
 
   afterAll(async () => {
-    await io.rmRF(workspaceDir);
+    await rmRF(workspaceDir);
     stdoutSpy.mockRestore();
   });
 
@@ -34,17 +34,17 @@ describe("GCP Service Account setup", () => {
   }`;
 
   it("should process an JSON string", async () => {
-    await gcp.setupServiceAccount(serviceAccountKey);
+    await setupServiceAccount(serviceAccountKey);
     expect(process.env.GCLOUD_PROJECT).toEqual("cf-2tier-uhd-test-e9");
     expect(process.env.GOOGLE_APPLICATION_CREDENTIALS).toMatch(/workspace/);
-    expect(fs.existsSync(path.resolve(String(process.env.GOOGLE_APPLICATION_CREDENTIALS)))).toBe(true);
+    expect(fsExistsSync(pathResolve(String(process.env.GOOGLE_APPLICATION_CREDENTIALS)))).toBe(true);
   });
 
   it("should process an base64 encoded string", async () => {
     const input = Buffer.from(serviceAccountKey, "ascii").toString("base64");
-    await gcp.setupServiceAccount(input);
+    await setupServiceAccount(input);
     expect(process.env.GCLOUD_PROJECT).toEqual("cf-2tier-uhd-test-e9");
     expect(process.env.GOOGLE_APPLICATION_CREDENTIALS).toMatch(/workspace/);
-    expect(fs.existsSync(path.resolve(String(process.env.GOOGLE_APPLICATION_CREDENTIALS)))).toBe(true);
+    expect(fsExistsSync(pathResolve(String(process.env.GOOGLE_APPLICATION_CREDENTIALS)))).toBe(true);
   });
 });
