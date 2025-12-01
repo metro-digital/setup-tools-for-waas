@@ -29,7 +29,7 @@
     "@fastify/pre-commit": "^2.2.1",
     "@tsconfig/node24": "^24.0.3",
     "@types/node": "^24.10.1",
-    "@vitest/coverage-v8": "^4.0.13",
+    "@vitest/coverage-v8": "^4.0.14",
     "esbuild": "^0.27.0",
     "yaml": "^2.8.1",
     "typescript": "^5.9.3",
